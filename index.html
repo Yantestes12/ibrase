@@ -1765,7 +1765,7 @@
     <script>
 
         // ── CONTROLE AUTOMÁTICO DE VERSÃO & LIMPEZA DE CACHE (ZERO CACHE OBSOLETO) ──
-        const APP_BUILD_VERSION = '2026.09.22_ibrase_v1';
+        const APP_BUILD_VERSION = '2026.09.22_ibrase_v2';
         try {
             const lastVer = localStorage.getItem('ibrase_app_version');
             if (lastVer !== APP_BUILD_VERSION) {
@@ -3696,8 +3696,40 @@
                     (currentMatriculasList || []).map(m => String(m.projeto_id)).filter(Boolean)
                 );
 
+                // Garante dados de núcleos e espaços disponíveis para validação rigorosa
+                await garantirCachesCarregados();
+                const todosNucleos = (_cacheNucleos && _cacheNucleos.length > 0) ? _cacheNucleos : [...NUCLEOS_CATALOGO_OFICIAL];
+                const todosEspacos = (_cacheEspacos && _cacheEspacos.length > 0) ? _cacheEspacos : [...ESPACOS_CATALOGO_OFICIAL];
+
+                function resolverCidadeAux(n) {
+                    const esp = todosEspacos.find(e => 
+                        (n.espaco_id && String(e.id) === String(n.espaco_id)) || 
+                        (n.bairro_id && String(e.id) === String(n.bairro_id)) || 
+                        (n.nome && e.nome && n.nome.trim().toLowerCase() === e.nome.trim().toLowerCase())
+                    );
+                    return (esp?.cidade && String(esp.cidade).trim()) || (n.cidade && String(n.cidade).trim()) || '';
+                }
+
+                let totalProjetosExibidos = 0;
+
                 projetos.forEach(p => {
-                    if (p.ativo === false || p.ativo === 0) return;
+                    if (p.ativo === false || p.ativo === 0 || p.ativo === 'false') return;
+
+                    // FILTRO INFALÍVEL: Só exibe projeto se ele possuir núcleos ATIVOS e com CIDADE cadastrada
+                    const pIdNum = parseInt(p.id);
+                    const nucleosAtivosProj = todosNucleos.filter(n => 
+                        parseInt(n.projeto_id) === pIdNum && 
+                        n.ativo !== false && n.ativo !== 0 && n.ativo !== 'false'
+                    );
+
+                    // Se não tiver nenhum núcleo ativo, NÃO EXIBE O PROJETO
+                    if (nucleosAtivosProj.length === 0) return;
+
+                    // Se não tiver nenhuma cidade válida nos núcleos ativos, NÃO EXIBE O PROJETO
+                    const temCidade = nucleosAtivosProj.some(n => !!resolverCidadeAux(n));
+                    if (!temCidade) return;
+
+                    totalProjetosExibidos++;
 
                     const min = p.idade_min !== null && p.idade_min !== undefined ? parseInt(p.idade_min) : 6;
                     const max = p.idade_max !== null && p.idade_max !== undefined ? parseInt(p.idade_max) : 18;
@@ -3736,6 +3768,11 @@
                     `;
                     container.appendChild(card);
                 });
+
+                if (totalProjetosExibidos === 0) {
+                    container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 20px; color: var(--c-marrom-verm); font-weight: 700;">Nenhum projeto com núcleos e vagas abertas no momento.</div>';
+                    return;
+                }
 
                 if (window.lucide) lucide.createIcons();
 
@@ -3878,17 +3915,15 @@
                     (n.bairro_id && e.id == n.bairro_id) || 
                     (n.nome && e.nome && n.nome.trim().toLowerCase() === e.nome.trim().toLowerCase())
                 );
-                return (esp?.cidade && String(esp.cidade).trim()) || (n.cidade && String(n.cidade).trim()) || "Campos dos Goytacazes";
+                return (esp?.cidade && String(esp.cidade).trim()) || (n.cidade && String(n.cidade).trim()) || '';
             }
 
-            // Filtra os núcleos pertencentes ao projeto
+            // Filtra APENAS os núcleos pertencentes ao projeto que estejam RIGOROSAMENTE ATIVOS
             const pIdNum = parseInt(projId);
-            let nucleosDoProj = nucleos.filter(n => !pIdNum || parseInt(n.projeto_id) === pIdNum);
-
-            // Se porventura a lista estiver vazia por filtro rígido, traz todos os núcleos de apoio da instituição
-            if (nucleosDoProj.length === 0) {
-                nucleosDoProj = nucleos;
-            }
+            const nucleosDoProj = nucleos.filter(n => 
+                (!pIdNum || parseInt(n.projeto_id) === pIdNum) &&
+                n.ativo !== false && n.ativo !== 0 && n.ativo !== 'false'
+            );
 
             // Coleta cidades únicas de forma limpa
             const cidadesSet = new Set();
@@ -3898,7 +3933,15 @@
             });
 
             const cidadesArr = Array.from(cidadesSet);
-            if (cidadesArr.length === 0) cidadesArr.push("Campos dos Goytacazes");
+
+            if (cidadesArr.length === 0) {
+                selectCid.innerHTML = '<option value="">Nenhuma localidade ativa encontrada para este projeto</option>';
+                const modContainer = document.getElementById('modalidadesCardsContainer');
+                if (modContainer) {
+                    modContainer.innerHTML = '<div style="grid-column: 1 / -1; color: var(--text-muted); font-size: 13px; padding: 20px; text-align: center; border: 1.5px dashed var(--border-pencil); border-radius: var(--radius-input);">Nenhum núcleo ativo com vagas abertas para este projeto no momento.</div>';
+                }
+                return;
+            }
 
             // Ordena colocando Campos dos Goytacazes primeiro se existir
             cidadesArr.sort((a, b) => {
@@ -3915,20 +3958,16 @@
                 selectCid.appendChild(opt);
             });
 
-            // Se houver apenas 1 cidade ou se o aluno for de Campos, seleciona automaticamente
+            // Se houver apenas 1 cidade, seleciona automaticamente
             if (cidadesArr.length === 1) {
                 selectCid.value = cidadesArr[0];
                 carregarModalidadesDaCidade(cidadesArr[0], projId);
             } else {
-                // Seleciona Campos dos Goytacazes como padrão se existir para este projeto
+                // Seleciona Campos dos Goytacazes como padrão se existir para este projeto, senão primeira cidade
                 const campos = cidadesArr.find(c => c.toLowerCase().includes('campos'));
-                if (campos) {
-                    selectCid.value = campos;
-                    carregarModalidadesDaCidade(campos, projId);
-                } else {
-                    selectCid.value = cidadesArr[0];
-                    carregarModalidadesDaCidade(cidadesArr[0], projId);
-                }
+                const cidInicial = campos || cidadesArr[0];
+                selectCid.value = cidInicial;
+                carregarModalidadesDaCidade(cidInicial, projId);
             }
 
             selectCid.onchange = () => {
@@ -4037,34 +4076,23 @@
 
             function resolverCidade(n) {
                 const esp = resolverEspaco(n);
-                return (esp && esp.cidade && String(esp.cidade).trim()) || (n.cidade && String(n.cidade).trim()) || "Campos dos Goytacazes";
+                return (esp && esp.cidade && String(esp.cidade).trim()) || (n.cidade && String(n.cidade).trim()) || '';
             }
 
             const pIdNum = parseInt(projId);
 
-            // NÍVEL 1: Filtra núcleos por projeto E pela cidade selecionada
+            // NÍVEL 1: Filtra apenas núcleos ATIVOS do projeto E pela cidade selecionada
             let filtrados = nucleos.filter(n => {
+                if (n.ativo === false || n.ativo === 0 || n.ativo === 'false') return false;
                 const matchProj = (!pIdNum || parseInt(n.projeto_id) === pIdNum);
                 const cid = resolverCidade(n);
                 const matchCid = String(cid).trim().toLowerCase() === String(cidadeEscolhida).trim().toLowerCase();
                 return matchProj && matchCid;
             });
 
-            // Fallbacks inteligentes para garantir disponibilidade real
             if (filtrados.length === 0) {
-                filtrados = nucleos.filter(n => {
-                    const cid = resolverCidade(n);
-                    return String(cid).trim().toLowerCase() === String(cidadeEscolhida).trim().toLowerCase();
-                });
-            }
-            if (filtrados.length === 0) {
-                filtrados = nucleos.filter(n => (!pIdNum || parseInt(n.projeto_id) === pIdNum));
-            }
-            if (filtrados.length === 0) {
-                filtrados = nucleos;
-            }
-            if (filtrados.length === 0) {
-                filtrados = [...NUCLEOS_CATALOGO_OFICIAL];
+                modContainer.innerHTML = '<div style="grid-column: 1 / -1; color: var(--text-muted); font-size: 13px; padding: 20px; text-align: center; border: 1.5px dashed var(--border-pencil); border-radius: var(--radius-input);">Nenhuma modalidade esportiva com vagas abertas para esta cidade neste projeto.</div>';
+                return;
             }
 
             // Agrupa por Modalidades REAIS que de fato existem nos núcleos filtrados
@@ -4072,7 +4100,7 @@
             filtrados.forEach(n => {
                 const esp = resolverEspaco(n);
                 const modId = n.modalidade_id || esp?.modalidade_id;
-                const modNome = n.modalidade_nome || modMap[modId] || MODALIDADES_FALLBACK[modId] || 'Futebol de Campo';
+                const modNome = n.modalidade_nome || modMap[modId] || (typeof MODALIDADES_FALLBACK !== 'undefined' ? MODALIDADES_FALLBACK[modId] : null) || 'Futebol de Campo';
                 const key = modId ? String(modId) : modNome.trim().toLowerCase();
 
                 if (!modalidadesMap.has(key)) {
@@ -4148,6 +4176,12 @@
             const container = document.getElementById('nucleosCardsContainer');
             container.innerHTML = '';
 
+            const ativos = (nucleosDaMod || []).filter(n => n.ativo !== false && n.ativo !== 0 && n.ativo !== 'false');
+            if (ativos.length === 0) {
+                container.innerHTML = '<div style="grid-column: 1 / -1; color: var(--text-muted); font-size: 13px; padding: 20px; text-align: center; border: 1.5px dashed var(--border-pencil); border-radius: var(--radius-input);">Nenhum núcleo ativo com vagas abertas para esta modalidade no momento.</div>';
+                return;
+            }
+
             function resolverEspaco(n) {
                 return (espacos || []).find(e => 
                     (n.espaco_id && String(e.id) === String(n.espaco_id)) || 
@@ -4156,7 +4190,7 @@
                 );
             }
 
-            nucleosDaMod.forEach((n, idx) => {
+            ativos.forEach((n, idx) => {
                 const esp = resolverEspaco(n);
                 const bairroNome = (esp?.bairro && esp.bairro !== 'temp') ? esp.bairro : (n.bairro && n.bairro !== 'temp' ? n.bairro : (esp?.nome || n.nome || 'Núcleo Central'));
                 const refLocal = n.ponto_referencia || esp?.ponto_referencia || esp?.endereco || esp?.rua || 'Núcleo Oficial IBRASE';
