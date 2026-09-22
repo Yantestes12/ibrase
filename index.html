@@ -1577,7 +1577,7 @@
                             1. Primeiro, selecione a Cidade do treino: <span class="req">*</span>
                         </label>
                         <select id="select_cidade_filtro" class="field-select" required>
-                            <option value="">Carregando cidades disponíveis…</option>
+                            <option value="">Selecione a cidade do treino…</option>
                         </select>
                     </div>
 
@@ -1765,7 +1765,7 @@
     <script>
 
         // ── CONTROLE AUTOMÁTICO DE VERSÃO & LIMPEZA DE CACHE (ZERO CACHE OBSOLETO) ──
-        const APP_BUILD_VERSION = '2026.09.22_ibrase_v2';
+        const APP_BUILD_VERSION = '2026.09.22_ibrase_v3';
         try {
             const lastVer = localStorage.getItem('ibrase_app_version');
             if (lastVer !== APP_BUILD_VERSION) {
@@ -3230,20 +3230,29 @@
             garantirCachesCarregados();
         });
 
-        // ── Pré-carregamento Confiável de Caches ──
+        // ── Pré-carregamento Confiável de Caches (com Timeout Defensivo) ──
         function garantirCachesCarregados() {
             if (_promiseCaches) return _promiseCaches;
+
+            const fetchWithTimeout = (url, opts = {}, ms = 2000) => {
+                const ctrl = new AbortController();
+                const timer = setTimeout(() => ctrl.abort(), ms);
+                return fetch(url, { ...opts, signal: ctrl.signal })
+                    .then(r => r.json())
+                    .catch(() => null)
+                    .finally(() => clearTimeout(timer));
+            };
 
             _promiseCaches = (async () => {
                 try {
                     const [respN, respE, respM] = await Promise.all([
-                        fetch(API.buscarNucleos).then(r => r.json()).catch(() => null),
-                        fetch(API.buscarEspacos).then(r => r.json()).catch(() => null),
-                        fetch(API.buscarModalidades, { 
+                        fetchWithTimeout(API.buscarNucleos),
+                        fetchWithTimeout(API.buscarEspacos),
+                        fetchWithTimeout(API.buscarModalidades, { 
                             method: 'POST', 
                             headers: {'Content-Type': 'application/json'}, 
                             body: JSON.stringify({ instituto: 'IBRASE' }) 
-                        }).then(r => r.json()).catch(() => null)
+                        })
                     ]);
 
                     const nList = parseN8N(respN, 'nucleos');
@@ -3256,7 +3265,6 @@
                         _cacheEspacos = eList;
                     }
                     
-                    // Tratamento especial para buscarmodalidade que retorna { projetos: [...] }
                     let mods = [];
                     if (respM) {
                         if (Array.isArray(respM) && respM[0]?.projetos) mods = respM[0].projetos;
@@ -3887,32 +3895,28 @@
                 preencher('mat_resp_whatsapp', ultimaMat.resp_whatsapp);
             }
 
-            // Carrega as Cidades e os Núcleos com Await Garantido
-            await carregarCidadesDoProjeto(projId);
+            // Carrega as Cidades e os Núcleos de Imediato (0ms de espera)
+            carregarCidadesDoProjeto(projId);
 
             irParaPasso(1);
             window.scrollTo({ top: 40, behavior: 'smooth' });
         }
 
         // ── LÓGICA INFALÍVEL DE CIDADE -> NÚCLEOS (Bairro + Modalidade em Quadradinhos) ──
-        async function carregarCidadesDoProjeto(projId) {
+        function carregarCidadesDoProjeto(projId) {
             const selectCid = document.getElementById('select_cidade_filtro');
             const container = document.getElementById('nucleosCardsContainer');
+            const modContainer = document.getElementById('modalidadesCardsContainer');
 
-            selectCid.innerHTML = '<option value="">Carregando cidades disponíveis…</option>';
-            container.innerHTML = '<div style="grid-column: 1 / -1; color: var(--text-muted); font-size: 13px; padding: 20px; text-align: center;"><i data-lucide="loader-2" class="spin" style="width: 20px; height: 20px; margin-bottom: 6px; color: var(--c-verde);"></i><p>Carregando núcleos oficiais...</p></div>';
-            if (window.lucide) lucide.createIcons();
-
-            // Garante o carregamento dos caches antes de filtrar
-            await garantirCachesCarregados();
+            if (!selectCid) return;
 
             const nucleos = (_cacheNucleos && _cacheNucleos.length > 0) ? _cacheNucleos : [...NUCLEOS_CATALOGO_OFICIAL];
             const espacos = (_cacheEspacos && _cacheEspacos.length > 0) ? _cacheEspacos : [...ESPACOS_CATALOGO_OFICIAL];
 
             function resolverCidadeDoNucleo(n) {
                 const esp = espacos.find(e => 
-                    (n.espaco_id && e.id == n.espaco_id) || 
-                    (n.bairro_id && e.id == n.bairro_id) || 
+                    (n.espaco_id && String(e.id) === String(n.espaco_id)) || 
+                    (n.bairro_id && String(e.id) === String(n.bairro_id)) || 
                     (n.nome && e.nome && n.nome.trim().toLowerCase() === e.nome.trim().toLowerCase())
                 );
                 return (esp?.cidade && String(esp.cidade).trim()) || (n.cidade && String(n.cidade).trim()) || '';
@@ -3936,7 +3940,6 @@
 
             if (cidadesArr.length === 0) {
                 selectCid.innerHTML = '<option value="">Nenhuma localidade ativa encontrada para este projeto</option>';
-                const modContainer = document.getElementById('modalidadesCardsContainer');
                 if (modContainer) {
                     modContainer.innerHTML = '<div style="grid-column: 1 / -1; color: var(--text-muted); font-size: 13px; padding: 20px; text-align: center; border: 1.5px dashed var(--border-pencil); border-radius: var(--radius-input);">Nenhum núcleo ativo com vagas abertas para este projeto no momento.</div>';
                 }
@@ -3958,21 +3961,18 @@
                 selectCid.appendChild(opt);
             });
 
-            // Se houver apenas 1 cidade, seleciona automaticamente
-            if (cidadesArr.length === 1) {
-                selectCid.value = cidadesArr[0];
-                carregarModalidadesDaCidade(cidadesArr[0], projId);
-            } else {
-                // Seleciona Campos dos Goytacazes como padrão se existir para este projeto, senão primeira cidade
-                const campos = cidadesArr.find(c => c.toLowerCase().includes('campos'));
-                const cidInicial = campos || cidadesArr[0];
-                selectCid.value = cidInicial;
-                carregarModalidadesDaCidade(cidInicial, projId);
-            }
+            // Seleciona Campos dos Goytacazes como padrão se existir para este projeto, senão primeira cidade
+            const campos = cidadesArr.find(c => c.toLowerCase().includes('campos'));
+            const cidInicial = campos || cidadesArr[0];
+            selectCid.value = cidInicial;
+            carregarModalidadesDaCidade(cidInicial, projId);
 
             selectCid.onchange = () => {
                 carregarModalidadesDaCidade(selectCid.value, projId);
             };
+
+            // Dispara background sync com timeout leve
+            garantirCachesCarregados();
         }
 
 
@@ -4364,6 +4364,14 @@
             panes.forEach((el, idx) => {
                 el.classList.toggle('active', (idx + 1) === passo);
             });
+
+            // Se for para a Etapa 3 e o select de cidades ainda não tiver opções carregadas:
+            if (passo === 3 && currentSelectedProject && currentSelectedProject.id) {
+                const selectCid = document.getElementById('select_cidade_filtro');
+                if (!selectCid || selectCid.options.length <= 1 || !selectCid.value) {
+                    carregarCidadesDoProjeto(currentSelectedProject.id);
+                }
+            }
 
             const pct = (passo / totalFormSteps) * 100;
             document.getElementById('formProgressBar').style.width = `${pct}%`;
