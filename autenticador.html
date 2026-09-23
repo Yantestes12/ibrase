@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Autenticador de Matrícula — IBRASE / INTEGRA</title>
+  
+  <link rel="icon" type="image/x-icon" href="favicon_ibrase.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #ce6200;
+      --primary-dark: #9a4900;
+      --bg-color: #faf8f5;
+      --surface: #ffffff;
+      --text-main: #181818;
+      --text-muted: #576574;
+      --border: #e8e2d8;
+      
+      --danger: #ef4444;
+      --danger-light: #fef2f2;
+      
+      --success: #ce6200;
+      --success-light: #fff8eb;
+      
+      --font-main: 'Plus Jakarta Sans', 'Outfit', sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px;
+    }
+
+    .header-logo {
+      margin-top: 16px;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .header-logo img {
+      height: 44px;
+      object-fit: contain;
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
+      width: 100%;
+      max-width: 480px;
+      padding: 30px 24px;
+      position: relative;
+      overflow: hidden;
+      display: none;
+      border: 1px solid var(--border);
+    }
+
+    .card.show {
+      display: block;
+      animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Loading State */
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 40px 0;
+    }
+    
+    .spinner {
+      width: 46px;
+      height: 46px;
+      border: 4px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Success State */
+    .seal-success {
+      width: 76px;
+      height: 76px;
+      background: var(--success-light);
+      color: var(--success);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 18px;
+      position: relative;
+    }
+    
+    .seal-success::after {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      border: 2px dashed var(--success);
+      opacity: 0.35;
+      animation: rotate-slow 12s linear infinite;
+    }
+
+    @keyframes rotate-slow {
+      to { transform: rotate(360deg); }
+    }
+
+    .seal-success .material-symbols-outlined {
+      font-size: 38px;
+    }
+
+    .title {
+      text-align: center;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 6px;
+      letter-spacing: -0.3px;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 13.5px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      background: var(--bg-color);
+      padding: 18px 20px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+    }
+
+    .info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed var(--border);
+    }
+
+    .info-item:last-child {
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .info-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .info-value {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--text-main);
+      word-break: break-word;
+    }
+
+    .status-badge-ok {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--success-light);
+      color: var(--success);
+      border: 1px solid var(--success);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 800;
+      width: fit-content;
+      margin-top: 2px;
+    }
+
+    /* Error State */
+    .seal-error {
+      width: 76px;
+      height: 76px;
+      background: var(--danger-light);
+      color: var(--danger);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 18px;
+    }
+
+    .seal-error .material-symbols-outlined {
+      font-size: 38px;
+    }
+
+    .footer-stamp {
+      text-align: center;
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px dashed var(--border);
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-weight: 500;
+    }
+
+    .btn-retry {
+      display: block;
+      width: 100%;
+      margin-top: 18px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-logo">
+    <img src="logo_integra.png" alt="Plataforma Integra">
+    <span style="color:#94a3b8;font-weight:bold;font-size:22px;">×</span>
+    <img id="inst-logo" src="logo_ibrase.png" alt="Instituto IBRASE">
+  </div>
+
+  <!-- Carregamento -->
+  <div class="card show" id="loading-card">
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <div class="title" style="font-size:18px;">Autenticando...</div>
+      <div class="subtitle" style="margin:0;">Consultando autenticidade no banco de dados da instituição</div>
+    </div>
+  </div>
+
+  <!-- Sucesso -->
+  <div class="card" id="success-card">
+    <div class="seal-success">
+      <span class="material-symbols-outlined">verified</span>
+    </div>
+    <h1 class="title" style="color: var(--success);">MATRÍCULA AUTÊNTICA</h1>
+    <p class="subtitle">Este documento foi verificado e consta como autêntico em nossos registros oficiais.</p>
+
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="info-label">Status da Matrícula</span>
+        <div class="status-badge-ok">
+          <span class="material-symbols-outlined" style="font-size:16px;">check_circle</span>
+          <span id="res-status">CONFIRMADA & AUTÊNTICA</span>
+        </div>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Inscrição / Matrícula</span>
+        <span class="info-value" id="res-id">---</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Nome do Participante</span>
+        <span class="info-value" id="res-nome">---</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Idade / Responsável</span>
+        <span class="info-value" id="res-idade-resp">---</span>
+      </div>
+      <div class="info-item" id="item-nucleo" style="display:none;">
+        <span class="info-label">Núcleo / Turno</span>
+        <span class="info-value" id="res-nucleo">---</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Data e Hora do Registro</span>
+        <span class="info-value" id="res-data">---</span>
+      </div>
+    </div>
+
+    <div class="footer-stamp">
+      <span class="material-symbols-outlined" style="font-size:15px;color:var(--success);">verified_user</span>
+      Autenticação Digital IBRASE / Plataforma Integra
+    </div>
+  </div>
+
+  <!-- Erro -->
+  <div class="card" id="error-card">
+    <div class="seal-error">
+      <span class="material-symbols-outlined">gpp_bad</span>
+    </div>
+    <h1 class="title" style="color: var(--danger);">DOCUMENTO INVÁLIDO</h1>
+    <p class="subtitle">Não conseguimos localizar esta matrícula em nossos registros oficiais.</p>
+    
+    <div style="background:var(--danger-light);padding:14px;border-radius:10px;font-size:13px;color:#991b1b;text-align:center;line-height:1.45;">
+      Este documento pode ter sido alterado, cancelado ou o QR Code foi gerado com dados divergentes.
+    </div>
+
+    <a href="index.html" class="btn-retry">Ir para a Página Inicial</a>
+  </div>
+
+  <script>
+    function getQueryParam(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name) || '';
+    }
+
+    function formatDateTime(isoString) {
+      if (!isoString) return 'Data não registrada';
+      try {
+        const d = new Date(isoString);
+        if (isNaN(d.getTime())) return isoString;
+        return d.toLocaleDateString('pt-BR') + ' às ' + d.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
+      } catch(e) { return isoString; }
+    }
+
+    function getF(obj, keys) {
+      if (!obj || typeof obj !== 'object') return '';
+      if (typeof keys === 'string') keys = [keys];
+      for (var i = 0; i < keys.length; i++) {
+        var k = keys[i];
+        if (obj[k] !== undefined && obj[k] !== null && String(obj[k]).trim() !== '') {
+          return obj[k];
+        }
+      }
+      return '';
+    }
+
+    async function validarMatricula() {
+      const matId = getQueryParam('id') || getQueryParam('matricula') || getQueryParam('n_inscricao');
+      const instParam = (getQueryParam('inst') || 'IBRASE').toUpperCase().trim();
+      
+      const elInstLogo = document.getElementById('inst-logo');
+      if (instParam === 'IBRASE') {
+        elInstLogo.src = 'logo_ibrase.png';
+        document.documentElement.style.setProperty('--primary', '#ce6200');
+        document.documentElement.style.setProperty('--primary-dark', '#9a4900');
+        document.documentElement.style.setProperty('--success', '#ce6200');
+        document.documentElement.style.setProperty('--success-light', '#fff8eb');
+      } else if (instParam === 'GASCTPNA') {
+        elInstLogo.src = 'logo_gasctpna.jpg';
+        document.documentElement.style.setProperty('--primary', '#10b981');
+        document.documentElement.style.setProperty('--success', '#10b981');
+        document.documentElement.style.setProperty('--success-light', '#ecfdf5');
+      }
+
+      if (!matId) {
+        showError();
+        return;
+      }
+
+      try {
+        let data = null;
+
+        // 1. Consulta prioritária via webhook buscarmatricula (Supabase indexado por ID)
+        try {
+          const urlBusca = `https://w.ibrase.com.br/webhook/buscarmatricula?id=${encodeURIComponent(matId)}&instituto=${encodeURIComponent(instParam)}`;
+          const respBusca = await fetch(urlBusca);
+          if (respBusca.ok) {
+            const txt = await respBusca.text();
+            if (txt && txt.trim() && txt.trim() !== '[]' && txt.trim() !== '[{}]') {
+              data = JSON.parse(txt);
+            }
+          }
+        } catch (eBusca) {
+          console.warn('Tentativa 1 (buscarmatricula) falhou:', eBusca);
+        }
+
+        // 2. Fallback via webhook matriculas-get
+        if (!data || (Array.isArray(data) && data.length === 0)) {
+          try {
+            const urlGet = `https://w.ibrase.com.br/webhook/matriculas-get?instituto=${encodeURIComponent(instParam)}&id=${encodeURIComponent(matId)}`;
+            const respGet = await fetch(urlGet);
+            if (respGet.ok) {
+              const txtGet = await respGet.text();
+              if (txtGet && txtGet.trim() && txtGet.trim() !== '[]' && txtGet.trim() !== '[{}]') {
+                data = JSON.parse(txtGet);
+              }
+            }
+          } catch(eGet) {
+            console.warn('Tentativa 2 (matriculas-get) falhou:', eGet);
+          }
+        }
+
+        // 3. Fallback via webhook autenticador
+        if (!data || (Array.isArray(data) && data.length === 0)) {
+          try {
+            const urlAuth = `https://w.ibrase.com.br/webhook/autenticador?n_inscricao=${encodeURIComponent(matId)}&id=${encodeURIComponent(matId)}&instituto=${encodeURIComponent(instParam)}`;
+            const respAuth = await fetch(urlAuth);
+            if (respAuth.ok) {
+              const txtAuth = await respAuth.text();
+              if (txtAuth && txtAuth.trim() && txtAuth.trim() !== '[]' && txtAuth.trim() !== '[{}]') {
+                data = JSON.parse(txtAuth);
+              }
+            }
+          } catch(eAuth) {
+            console.warn('Tentativa 3 (autenticador) falhou:', eAuth);
+          }
+        }
+
+        if (!data) {
+          showError();
+          return;
+        }
+        
+        let m;
+        if (Array.isArray(data)) m = data[0];
+        else if (data.dados && typeof data.dados === 'object' && !Array.isArray(data.dados)) m = data.dados;
+        else m = data;
+
+        if (!m || (!m.id && !m.n_inscricao && !m.aluno_nome && !m.nome)) {
+          showError();
+          return;
+        }
+
+        // Preenchimento dos dados verificados
+        const created = getF(m, ['hora do aceite aluno', 'hora_do_aceite_aluno', 'hora_aceite_aluno', 'created_at', 'data_cadastro']);
+        const nAluno = m.aluno_nome || m.nome_aluno || m.nome || 'Não informado';
+        const idadeNum = m.idade;
+        const idadeCalc = idadeNum ? `${idadeNum} anos` : 'Idade não informada';
+        const nResp = m.resp_nome || m.nome_responsavel || (idadeNum && idadeNum >= 18 ? 'Próprio Participante (Maior de Idade)' : 'Não informado');
+        const numInscricao = String(m.id || m.matricula || m.n_inscricao || matId);
+        const protocolo = m.PROTOCOLO || m.protocolo || ('INT-' + numInscricao.padStart(6, '0'));
+
+        document.getElementById('res-id').textContent = `#${numInscricao} (Protocolo: ${protocolo})`;
+        document.getElementById('res-nome').textContent = nAluno;
+        document.getElementById('res-idade-resp').textContent = `${idadeCalc} • Resp: ${nResp}`;
+        document.getElementById('res-data').textContent = formatDateTime(created);
+
+        // Turno / Núcleo se disponíveis
+        const turno = m.turno_label || m.turno || '';
+        const nucleo = m.nucleo_nome || m.nucleo || '';
+        if (turno || nucleo) {
+          const itemNuc = document.getElementById('item-nucleo');
+          itemNuc.style.display = 'flex';
+          document.getElementById('res-nucleo').textContent = [nucleo, turno].filter(Boolean).join(' • ');
+        }
+
+        showSuccess();
+
+      } catch (err) {
+        console.error('Erro na validação de autenticidade:', err);
+        showError();
+      }
+    }
+
+    function showSuccess() {
+      document.getElementById('loading-card').classList.remove('show');
+      document.getElementById('success-card').classList.add('show');
+    }
+
+    function showError() {
+      document.getElementById('loading-card').classList.remove('show');
+      document.getElementById('error-card').classList.add('show');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(validarMatricula, 300);
+    });
+  </script>
+</body>
+</html>
