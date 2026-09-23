@@ -1554,9 +1554,9 @@
                         <div class="health-details-input" id="details_docs" style="display:none; margin-top:12px;">
                             <input type="file" id="doc_file_input" accept="image/*,.pdf" multiple style="display:none;">
                             
-                            <div id="doc-dropzone" style="border: 2px dashed #319244; background: #fdfbf7; border-radius: 8px; padding: 18px 12px; text-align: center; cursor: pointer; transition: all 0.2s ease;">
+                            <div id="doc-dropzone" style="border: 2px dashed #ce6200; background: #fff8eb; border-radius: 8px; padding: 18px 12px; text-align: center; cursor: pointer; transition: all 0.2s ease;">
                                 <div style="font-size: 26px; margin-bottom: 4px;">📄 🩺</div>
-                                <div style="font-weight: 700; color: #24640a; font-size: 13.5px;">Clique aqui para selecionar o laudo médico ou atestado</div>
+                                <div style="font-weight: 700; color: #ce6200; font-size: 13.5px;">Clique aqui para selecionar o laudo médico ou atestado</div>
                                 <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">Fotos (JPG, PNG) ou PDF — até 6 arquivos</div>
                             </div>
 
@@ -1765,7 +1765,7 @@
     <script>
 
         // ── CONTROLE AUTOMÁTICO DE VERSÃO & LIMPEZA DE CACHE (ZERO CACHE OBSOLETO) ──
-        const APP_BUILD_VERSION = '2026.09.22_ibrase_v3';
+        const APP_BUILD_VERSION = '2026.09.23_ibrase_v4';
         try {
             const lastVer = localStorage.getItem('ibrase_app_version');
             if (lastVer !== APP_BUILD_VERSION) {
@@ -4671,17 +4671,17 @@
 
             dropzone.ondragover = (e) => {
                 e.preventDefault();
-                dropzone.style.borderColor = '#1b5e20';
-                dropzone.style.background = '#f0fdf4';
+                dropzone.style.borderColor = '#ce6200';
+                dropzone.style.background = '#fff8eb';
             };
             dropzone.ondragleave = () => {
-                dropzone.style.borderColor = '#319244';
-                dropzone.style.background = '#fdfbf7';
+                dropzone.style.borderColor = '#ce6200';
+                dropzone.style.background = '#fff8eb';
             };
             dropzone.ondrop = (e) => {
                 e.preventDefault();
-                dropzone.style.borderColor = '#319244';
-                dropzone.style.background = '#fdfbf7';
+                dropzone.style.borderColor = '#ce6200';
+                dropzone.style.background = '#fff8eb';
                 if (e.dataTransfer && e.dataTransfer.files) {
                     adicionarArquivos(e.dataTransfer.files);
                 }
@@ -4953,19 +4953,19 @@
                         @page { size: A4; margin: 8mm 10mm; }
                         * { box-sizing: border-box; margin: 0; padding: 0; }
                         body { font-family: sans-serif; font-size: 9pt; color: #000; line-height: 1.3; background: #fff; padding: 10px; }
-                        .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 2.5px solid #319244; padding-bottom: 6px; margin-bottom: 10px; }
+                        .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 2.5px solid #ce6200; padding-bottom: 6px; margin-bottom: 10px; }
                         .logo-box { display: flex; align-items: center; gap: 8px; }
                         .logo-box img { max-height: 38px; }
                         .title-right { text-align: right; }
-                        .main-title { font-size: 13pt; font-weight: 800; color: #24640a; }
+                        .main-title { font-size: 13pt; font-weight: 800; color: #ce6200; }
                         .sub-title { font-size: 8.5pt; color: #5f4514; font-weight: 600; }
                         .box { border: 1px solid #cbd5e1; border-radius: 6px; margin-bottom: 8px; padding: 6px 10px; background: #fdfdfd; }
-                        .box-title { font-size: 8.5pt; font-weight: 800; color: #24640a; border-bottom: 1px solid #e2e8f0; padding-bottom: 3px; margin-bottom: 6px; text-transform: uppercase; }
+                        .box-title { font-size: 8.5pt; font-weight: 800; color: #ce6200; border-bottom: 1px solid #e2e8f0; padding-bottom: 3px; margin-bottom: 6px; text-transform: uppercase; }
                         .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px 10px; }
                         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; }
                         .f-item { font-size: 8.5pt; }
                         .f-lbl { font-weight: 700; color: #5f4514; }
-                        .qr-row { display: flex; align-items: center; gap: 12px; background: #f8fafc; border: 1px dashed #319244; padding: 6px 10px; border-radius: 6px; margin-top: 6px; }
+                        .qr-row { display: flex; align-items: center; gap: 12px; background: #f8fafc; border: 1px dashed #ce6200; padding: 6px 10px; border-radius: 6px; margin-top: 6px; }
                         .qr-row img { width: 54px; height: 54px; }
                         .sig-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 24px; }
                         .sig-col { text-align: center; }
@@ -4987,7 +4987,7 @@
                         </div>
                     </div>
 
-                    <div class="box" style="background:#eef7f0;border-color:#319244;">
+                    <div class="box" style="background:#fff8eb;border-color:#ce6200;">
                         <div class="grid-3">
                             <div class="f-item"><span class="f-lbl">Nº Matrícula:</span> <strong>#${numMatricula}</strong></div>
                             <div class="f-item"><span class="f-lbl">Projeto:</span> <strong>${projNome}</strong></div>
@@ -5057,7 +5057,7 @@
                     <div class="qr-row">
                         <img src="${qrImg}" alt="QR Autenticador">
                         <div>
-                            <div style="font-weight:800;font-size:8.5pt;color:#24640a;">AUTENTICAÇÃO DIGITAL OFICIAL</div>
+                            <div style="font-weight:800;font-size:8.5pt;color:#ce6200;">AUTENTICAÇÃO DIGITAL OFICIAL</div>
                             <div style="font-size:7.5pt;color:#555;">Validação eletrônica da inscrição no banco de dados da instituição IBRASE.</div>
                             <div style="font-size:7.5pt;font-family:monospace;color:#333;margin-top:2px;">${qrUrl}</div>
                         </div>
@@ -5081,19 +5081,19 @@
                         <p style="margin-bottom:6px;">A presente Declaração de Responsabilidade estabelece as condições, direitos e deveres relacionados à participação nas atividades gratuitas promovidas pelo Instituto Brasileiro de Sociologia e Estatística – IBRASE, aplicando-se aos participantes maiores de idade e, no caso de menores de idade, aos seus respectivos pais ou responsáveis legais. Ao realizar a matrícula e aceitar eletronicamente este documento, o participante maior de idade ou seu responsável legal declara estar ciente e de acordo com as condições estabelecidas a seguir.</p>
 
                         <p style="margin-bottom:4px;"><strong>1. AUTORIZAÇÃO PARA PARTICIPAÇÃO:</strong> Autorizo a participação do(a) aluno(a) nas atividades promovidas pelo IBRASE, incluindo atividades esportivas, educacionais, culturais, científicas, sociais, tecnológicas e demais ações compatíveis com os objetivos institucionais.</p>
-                        <p style="margin-bottom:6px;padding-left:10px;">§ 1º Fica autorizada a participação em atividades, eventos, apresentações, competições, visitas técnicas. § 2º Atividades externas serão previamente comunicadas. § 3º Despesas com transporte, alimentação e hospedagem em atividades externas serão de responsabilidade do aluno/responsável, salvo comunicação expressa. § 4º Em emergências, a equipe está autorizada a prestar os primeiros socorros e encaminhar a serviço de saúde.</p>
+                        <p style="margin-bottom:6px;padding-left:10px;">1º Fica autorizada a participação em atividades, eventos, apresentações, competições, visitas técnicas. 2º Atividades externas serão previamente comunicadas. 3º Despesas com transporte, alimentação e hospedagem em atividades externas serão de responsabilidade do aluno/responsável, salvo comunicação expressa. 4º Em emergências, a equipe está autorizada a prestar os primeiros socorros e encaminhar a serviço de saúde.</p>
 
                         <p style="margin-bottom:4px;"><strong>2. APTIDÃO, SEGURANÇA E RISCOS:</strong> Declaro que as informações de saúde são verdadeiras. Comprometo-me a informar qualquer restrição médica ou alergia.</p>
-                        <p style="margin-bottom:6px;padding-left:10px;">§ 1º Atestados podem ser solicitados. § 2º Ciente dos riscos inerentes (quedas, contusões). § 3º A instituição não se exime de falhas legais. § 4º A instituição adotará as medidas razoáveis de segurança.</p>
+                        <p style="margin-bottom:6px;padding-left:10px;">1º Atestados podem ser solicitados. 2º Ciente dos riscos inerentes (quedas, contusões). 3º A instituição não se exime de falhas legais. 4º A instituição adotará as medidas razoáveis de segurança.</p>
 
                         <p style="margin-bottom:4px;"><strong>3. USO DE IMAGEM E VOZ:</strong> Autorizo o uso gratuito da imagem/voz em materiais institucionais para prestação de contas e transparência.</p>
-                        <p style="margin-bottom:6px;padding-left:10px;">§ 1º A autorização é dada pelo responsável (se menor). § 2º Uso restrito às finalidades descritas. § 3º Pode ser revogado mediante solicitação.</p>
+                        <p style="margin-bottom:6px;padding-left:10px;">1º A autorização é dada pelo responsável (se menor). 2º Uso restrito às finalidades descritas. 3º Pode ser revogado mediante solicitação.</p>
 
                         <p style="margin-bottom:4px;"><strong>4. TRATAMENTO DE DADOS PESSOAIS (LGPD):</strong> Ciente de que os dados serão tratados para finalidades pedagógicas, de prestação de contas e controle institucional, conforme Lei nº 13.709/2018.</p>
-                        <p style="margin-bottom:6px;padding-left:10px;">§ 1º Dados usados para relatórios, auditoria e fiscalização. § 2º Armazenados pelos prazos legais. § 3º Compartilhamento apenas com órgãos públicos ou parceiros por exigência legal. § 4º Direitos garantidos na Política de Privacidade.</p>
+                        <p style="margin-bottom:6px;padding-left:10px;">1º Dados usados para relatórios, auditoria e fiscalização. 2º Armazenados pelos prazos legais. 3º Compartilhamento apenas com órgãos públicos ou parceiros por exigência legal. 4º Direitos garantidos na Política de Privacidade.</p>
 
                         <p style="margin-bottom:4px;"><strong>5. COMPROMISSO ESCOLAR:</strong> Responsabilidade do responsável legal em manter o aluno(a) matriculado(a) em ensino regular.</p>
-                        <p style="margin-bottom:6px;padding-left:10px;">§ 1º Participação no contraturno. § 2º Sujeito à comprovação de matrícula. § 3º Exige frequência mínima nas atividades.</p>
+                        <p style="margin-bottom:6px;padding-left:10px;">1º Participação no contraturno. 2º Sujeito à comprovação de matrícula. 3º Exige frequência mínima nas atividades.</p>
 
                         <p style="margin-bottom:4px;"><strong>6. NORMAS DE PARTICIPAÇÃO E 7. MATERIAIS:</strong> O participante compromete-se a respeitar as orientações, zelar pelos uniformes/materiais e manter comportamento compatível.</p>
 
@@ -5101,8 +5101,8 @@
                     </div>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px;">
-                        <div style="border: 1.5px dashed #319244; background: #eef7f0; padding: 8px; border-radius: 6px;">
-                            <div style="font-weight: 800; font-size: 8.5pt; color: #24640a; margin-bottom: 4px;">✓ RESPONSÁVEL: — STATUS: VALIDADA</div>
+                        <div style="border: 1.5px dashed #ce6200; background: #fff8eb; padding: 8px; border-radius: 6px;">
+                            <div style="font-weight: 800; font-size: 8.5pt; color: #ce6200; margin-bottom: 4px;">✓ RESPONSÁVEL: — STATUS: VALIDADA</div>
                             <ul style="list-style: none; font-size: 7.5pt; color: #333; line-height: 1.4;">
                                 <li>• LGPD ACEITO: ${createdAtStr}</li>
                                 <li>• Veracidade ACEITO: ${createdAtStr}</li>
@@ -5111,7 +5111,7 @@
                                 <li>• Protocolo: ${protocolo}</li>
                                 <li>• Aceite eletrônico: ${createdAtStr}</li>
                             </ul>
-                            <div style="text-align: center; font-size: 7.5pt; font-weight: 800; color: #24640a; margin-top: 8px;">ACEITE DO RESPONSÁVEL / ALUNO</div>
+                            <div style="text-align: center; font-size: 7.5pt; font-weight: 800; color: #ce6200; margin-top: 8px;">ACEITE DO RESPONSÁVEL / ALUNO</div>
                         </div>
 
                         <div style="border: 1.5px dashed #0284c7; background: #f0f9ff; padding: 8px; border-radius: 6px;">
@@ -5129,7 +5129,7 @@
                     </div>
 
                     <div class="no-print" style="text-align:center;margin-top:30px;">
-                        <button onclick="window.print()" style="background:#319244;color:#fff;border:none;padding:12px 28px;border-radius:8px;font-weight:800;font-size:14px;cursor:pointer;">🖨️ Imprimir / Salvar em PDF</button>
+                        <button onclick="window.print()" style="background:#ce6200;color:#fff;border:none;padding:12px 28px;border-radius:8px;font-weight:800;font-size:14px;cursor:pointer;">🖨️ Imprimir / Salvar em PDF</button>
                     </div>
                 </body>
                 </html>
