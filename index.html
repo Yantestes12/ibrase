@@ -444,6 +444,37 @@
             color: var(--text-body);
         }
 
+        .window-edit-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .window-edit-unlocked {
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #065f46;
+        }
+
+        .window-edit-locked {
+            background: rgba(100, 116, 139, 0.08);
+            border: 1px solid rgba(100, 116, 139, 0.25);
+            color: #475569;
+        }
+
+        .history-actions-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
         .btn-pdf-print-clean {
             background: #ffffff;
             border: 1.5px solid var(--c-verde);
@@ -458,11 +489,143 @@
             gap: 8px;
             cursor: pointer;
             transition: var(--transition);
+            flex: 1;
+            min-width: 180px;
         }
 
         .btn-pdf-print-clean:hover {
             background: var(--c-verde);
             color: #ffffff;
+        }
+
+        .btn-edit-action {
+            background: var(--c-verde);
+            border: 1.5px solid var(--c-verde);
+            color: #ffffff;
+            border-radius: var(--radius-input);
+            padding: 9px 14px;
+            font-size: 13px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            flex: 1;
+            min-width: 160px;
+            box-shadow: 0 2px 6px rgba(49, 146, 68, 0.2);
+        }
+
+        .btn-edit-action:hover {
+            background: var(--c-verde-escuro);
+            border-color: var(--c-verde-escuro);
+        }
+
+        .btn-request-action {
+            background: #ffffff;
+            border: 1.5px solid #64748b;
+            color: #334155;
+            border-radius: var(--radius-input);
+            padding: 9px 14px;
+            font-size: 13px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .btn-request-action:hover {
+            background: #f1f5f9;
+            border-color: #334155;
+            color: #0f172a;
+        }
+
+        .banner-modo-edicao {
+            background: #fffbeb;
+            border: 1.5px solid #f59e0b;
+            border-radius: 12px;
+            padding: 12px 18px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            color: #92400e;
+        }
+
+        .btn-cancel-edit {
+            background: #ffffff;
+            border: 1px solid #d97706;
+            color: #b45309;
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-cancel-edit:hover {
+            background: #fef3c7;
+        }
+
+        /* ── MODAL DE SOLICITAÇÃO PEDAGÓGICA (APÓS 6 HORAS) ── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            z-index: 100;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .modal-card {
+            background: #ffffff;
+            border-radius: var(--radius-card);
+            border: 1.5px solid var(--border-pencil);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+            padding: 26px 22px;
+            position: relative;
+            animation: slideUp 0.25s ease;
+        }
+
+        .modal-header-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(234, 179, 8, 0.15);
+            color: #ca8a04;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--c-verde-escuro);
+            margin-bottom: 6px;
+        }
+
+        .modal-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 16px;
         }
 
         /* ── LISTA DE PROJETOS DISPONÍVEIS ── */
@@ -1213,8 +1376,22 @@
                     <button type="button" id="btnClearCPF" class="cpf-btn-clear" title="Limpar">✕</button>
                 </div>
 
+                <!-- CAMPO CONDICIONAL DE DATA DE NASCIMENTO (QUANDO NÃO LOCALIZADO) -->
+                <div id="boxDataNascNovo" style="display: none; margin-bottom: 14px; animation: fadeIn 0.25s ease;">
+                    <label class="field-label" for="inputNascNovo">Data de Nascimento do Participante: <span class="req">*</span></label>
+                    <input 
+                        type="date" 
+                        id="inputNascNovo" 
+                        class="cpf-field-native" 
+                        style="padding: 0 16px; font-size: 15px;"
+                    >
+                    <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+                        Informe a data de nascimento para filtrar as turmas disponíveis para a sua idade.
+                    </p>
+                </div>
+
                 <button type="button" class="btn-primary-clean" id="btnConsultarCPF">
-                    <span>Consultar CPF</span>
+                    <span id="btnConsultarCPFText">Consultar CPF</span>
                     <i data-lucide="arrow-right" style="width: 17px; height: 17px;"></i>
                 </button>
 
@@ -1290,8 +1467,23 @@
                 </div>
             </div>
 
+            <div id="bannerModoEdicao" class="banner-modo-edicao" style="display: none;">
+                <div>
+                    <div style="font-weight: 800; font-size: 15px; display: flex; align-items: center; gap: 6px;">
+                        <i data-lucide="edit-3" style="width: 18px; height: 18px;"></i>
+                        <span>Modo de Edição de Matrícula Ativo (<span id="lblMatriculaEditando">#0</span>)</span>
+                    </div>
+                    <div style="font-size: 12px; opacity: 0.9; margin-top: 2px;">
+                        Você está alterando os dados cadastrais dentro do prazo limite gratuito de 6 horas.
+                    </div>
+                </div>
+                <button type="button" class="btn-cancel-edit" onclick="cancelarEdicaoMatricula()">Cancelar Edição</button>
+            </div>
+
             <form id="formMatriculaIBRASE" novalidate>
                 <!-- Campos ocultos de controle -->
+                <input type="hidden" id="hidden_modo_edicao" name="modo_edicao" value="false">
+                <input type="hidden" id="hidden_matricula_id" name="id" value="">
                 <input type="hidden" id="hidden_projeto_id" name="projeto_id">
                 <input type="hidden" id="hidden_projeto_nome" name="projeto_nome">
                 <input type="hidden" id="hidden_instituto" name="instituto" value="IBRASE">
@@ -1738,18 +1930,33 @@
             <div class="success-icon-wrap">
                 <i data-lucide="check" style="width: 30px; height: 30px;"></i>
             </div>
-            <h2 style="font-size: 20px; font-weight: 800; color: var(--c-verde-escuro);">Matrícula Realizada com Sucesso!</h2>
-            <p class="desc-clean" style="margin-top: 4px;">
+            <h2 style="font-size: 20px; font-weight: 800; color: var(--c-verde-escuro);" id="sucessoTitulo">Matrícula Realizada com Sucesso!</h2>
+            <p class="desc-clean" style="margin-top: 4px;" id="sucessoDesc">
                 Sua inscrição oficial foi registrada com êxito no banco de dados da IBRASE.
             </p>
             <div>
                 <span class="success-number-pill" id="sucessoNumeroMatricula">Matrícula: #000000</span>
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 10px; max-width: 340px; margin: 0 auto;">
+            <!-- AVISO DE JANELA DE 6 HORAS -->
+            <div style="background: rgba(16, 185, 129, 0.08); border: 1.5px solid rgba(16, 185, 129, 0.35); border-radius: 12px; padding: 12px 16px; max-width: 440px; margin: 0 auto 24px auto; text-align: left;">
+                <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 800; color: #065f46;">
+                    <i data-lucide="clock" style="width: 16px; height: 16px;"></i>
+                    <span>Janela de Edição Gratuita: 6 Horas</span>
+                </div>
+                <div style="font-size: 12px; color: #047857; margin-top: 2px;">
+                    Caso tenha cometido algum engano, você pode editar todos os seus dados diretamente no portal pelas próximas 6 horas.
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px; max-width: 360px; margin: 0 auto;">
                 <button type="button" class="btn-primary-clean" id="btnBaixarPDFSucesso">
                     <i data-lucide="printer" style="width: 17px; height: 17px;"></i>
                     <span>Baixar Ficha Oficial (PDF)</span>
+                </button>
+                <button type="button" class="btn-edit-action" id="btnEditarAgoraSucesso" style="display: none; justify-content: center;">
+                    <i data-lucide="edit-3" style="width: 16px; height: 16px;"></i>
+                    <span>Revisar ou Editar Meus Dados</span>
                 </button>
                 <button type="button" class="btn-secondary-clean" id="btnVoltarInicioSucesso">
                     <span>Concluir e Voltar ao Início</span>
@@ -1758,6 +1965,44 @@
         </div>
 
     </main>
+
+    <!-- ── MODAL: SOLICITAR EDIÇÃO AO PEDAGÓGICO (APÓS 6 HORAS) ── -->
+    <div class="modal-overlay" id="modalSolicitarEdicao">
+        <div class="modal-card">
+            <div class="modal-header-icon">
+                <i data-lucide="lock" style="width: 24px; height: 24px;"></i>
+            </div>
+            <h3 class="modal-title">Solicitar Alteração de Cadastro</h3>
+            <p class="modal-desc">
+                O prazo de edição direta e imediata (6 horas) já encerrou para a matrícula <strong id="modalMatriculaId">#000000</strong>. Para preservar a segurança e o planejamento pedagógico, informe abaixo o que deseja alterar para análise da Coordenação da IBRASE.
+            </p>
+
+            <div class="form-group">
+                <label class="field-label" for="solicitacao_motivo">O que você gostaria de alterar? <span class="req">*</span></label>
+                <textarea 
+                    id="solicitacao_motivo" 
+                    class="field-input" 
+                    style="height: 80px; padding: 10px; resize: none;" 
+                    placeholder="Ex: Gostaria de alterar o fardamento para camisa tamanho G, ou mudar meu telefone..."
+                ></textarea>
+            </div>
+
+            <div class="form-group" style="margin-top: 10px;">
+                <label class="field-label" for="solicitacao_whatsapp">WhatsApp para retorno:</label>
+                <input type="tel" id="solicitacao_whatsapp" class="field-input" placeholder="(22) 99999-9999" maxlength="15">
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 18px;">
+                <button type="button" class="btn-secondary-clean" id="btnFecharModalEdicao" style="flex: 1;">
+                    Fechar
+                </button>
+                <button type="button" class="btn-primary-clean" id="btnEnviarWhatsAppPedagogico" style="flex: 2; background: #25D366; color: #fff; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);">
+                    <i data-lucide="message-circle" style="width: 18px; height: 18px;"></i>
+                    <span>Enviar ao Pedagógico</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- ==========================================================================
          JAVASCRIPT DE ALTA PERFORMANCE (N8N + SUPABASE + RESOLUÇÃO INFALÍVEL)
@@ -1789,6 +2034,7 @@
             buscarMatriculas: 'https://w.ibrase.com.br/webhook/matriculas-get?instituto=IBRASE&t=' + Date.now(),
             buscarMatriculaId: 'https://w.ibrase.com.br/webhook/buscarmatricula',
             enviarMatricula: 'https://w.ibrase.com.br/webhook/matricula',
+            atualizarMatricula: 'https://w.ibrase.com.br/webhook/matriculaatualizar',
             consultarCEP: 'https://viacep.com.br/ws/'
         };
 
@@ -3226,6 +3472,7 @@
             setupSemNumero();
             setupDocDropzone();
             setupNascimentoListener();
+            setupModalSolicitacao();
             // Dispara o pré-carregamento imediato
             garantirCachesCarregados();
         });
@@ -3306,6 +3553,8 @@
             const input = document.getElementById('inputCPF');
             const btnClear = document.getElementById('btnClearCPF');
             const btnConsultar = document.getElementById('btnConsultarCPF');
+            const boxDataNasc = document.getElementById('boxDataNascNovo');
+            const inputNascNovo = document.getElementById('inputNascNovo');
             const respCpf = document.getElementById('mat_resp_cpf');
 
             if (input) {
@@ -3318,6 +3567,14 @@
 
                     if (btnClear) btnClear.style.display = v.length > 0 ? 'flex' : 'none';
 
+                    // Se o usuário editar o CPF, esconde a caixa de nascimento até validar o novo CPF
+                    if (boxDataNasc && boxDataNasc.style.display !== 'none' && v.replace(/\D/g, '').length < 11) {
+                        boxDataNasc.style.display = 'none';
+                        if (inputNascNovo) inputNascNovo.value = '';
+                        const txtEl = document.getElementById('btnConsultarCPFText');
+                        if (txtEl) txtEl.textContent = 'Consultar CPF';
+                    }
+
                     const raw = v.replace(/\D/g, '');
                     if (raw.length === 11) {
                         clearTimeout(input._timer);
@@ -3329,6 +3586,16 @@
                     if (e.key === 'Enter') {
                         e.preventDefault();
                         const raw = input.value.replace(/\D/g, '');
+                        if (raw.length === 11) executarConsultaCPF(raw);
+                    }
+                });
+            }
+
+            if (inputNascNovo) {
+                inputNascNovo.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const raw = input ? input.value.replace(/\D/g, '') : '';
                         if (raw.length === 11) executarConsultaCPF(raw);
                     }
                 });
@@ -3361,6 +3628,10 @@
                         input.value = '';
                         input.focus();
                     }
+                    if (boxDataNasc) boxDataNasc.style.display = 'none';
+                    if (inputNascNovo) inputNascNovo.value = '';
+                    const txtEl = document.getElementById('btnConsultarCPFText');
+                    if (txtEl) txtEl.textContent = 'Consultar CPF';
                     btnClear.style.display = 'none';
                     esconderFeedback();
                 });
@@ -3514,7 +3785,34 @@
 
                 const temNomeBanco = dadosAluno?.nome_da_pf || dadosAluno?.nome || dadosAluno?.aluno_nome || (matriculasEncontradas[0]?.aluno_nome);
                 const nomeAluno = temNomeBanco || 'Novo Participante';
-                const nascAluno = dadosAluno?.data_nascimento || dadosAluno?.nascimento || (matriculasEncontradas[0]?.data_nascimento) || '';
+                let nascAluno = dadosAluno?.data_nascimento || dadosAluno?.nascimento || (matriculasEncontradas[0]?.data_nascimento) || '';
+
+                // Se não há data de nascimento no cadastro (novo participante), solicita antes de entrar no portal
+                const boxDataNasc = document.getElementById('boxDataNascNovo');
+                const inputNascNovo = document.getElementById('inputNascNovo');
+
+                if (!nascAluno) {
+                    const dataDigitada = inputNascNovo ? inputNascNovo.value : '';
+                    if (!dataDigitada) {
+                        if (boxDataNasc) boxDataNasc.style.display = 'block';
+                        const txtEl = document.getElementById('btnConsultarCPFText');
+                        if (txtEl) txtEl.textContent = 'Confirmar Data e Acessar';
+                        mostrarFeedback('info', 'Participante não localizado no histórico. Por favor, informe a Data de Nascimento para identificarmos as vagas compatíveis.');
+                        if (inputNascNovo) inputNascNovo.focus();
+                        document.getElementById('btnConsultarCPF').disabled = false;
+                        return; // Interrompe para aguardar a data de nascimento
+                    } else {
+                        const idadeVal = calcularIdade(dataDigitada);
+                        if (idadeVal === null || isNaN(idadeVal) || idadeVal < 0 || idadeVal > 120) {
+                            mostrarFeedback('error', 'Por favor, informe uma data de nascimento válida.');
+                            if (inputNascNovo) inputNascNovo.focus();
+                            document.getElementById('btnConsultarCPF').disabled = false;
+                            return;
+                        }
+                        nascAluno = dataDigitada;
+                    }
+                }
+
                 const idadeCalculada = nascAluno ? calcularIdade(nascAluno) : null;
                 const idadeAluno = (idadeCalculada !== null && idadeCalculada >= 0 && idadeCalculada <= 120) ? idadeCalculada : null;
 
@@ -3527,11 +3825,7 @@
                     projetos_inscritos_ids: dadosAluno?.projetos_inscritos_ids || matriculasEncontradas.map(m => m.projeto_id).filter(Boolean)
                 };
 
-                if (temNomeBanco) {
-                    mostrarFeedback('success', `Identificado: ${nomeAluno}`);
-                } else {
-                    mostrarFeedback('success', 'CPF verificado! Escolha um projeto abaixo para iniciar a inscrição.');
-                }
+                mostrarFeedback('success', temNomeBanco ? `Identificado: ${nomeAluno}` : `Data confirmada (${idadeAluno} anos)! Redirecionando...`);
                 setTimeout(() => apresentarPainelDoAluno(), 250);
 
             } catch(err) {
@@ -3643,6 +3937,46 @@
                     ? item.turno
                     : 'A definir';
 
+                // Cálculo da Janela de Edição de 6 Horas
+                const diffMs = item.created_at ? (Date.now() - new Date(item.created_at).getTime()) : 0;
+                const diffHours = diffMs / (1000 * 60 * 60);
+                const podeEditarDireto = !item.created_at || (diffHours <= 6);
+
+                let bannerHtml = '';
+                let botaoAcaoHtml = '';
+
+                if (podeEditarDireto) {
+                    const remainingMs = Math.max(0, (6 * 3600 * 1000) - diffMs);
+                    const remH = Math.floor(remainingMs / 3600000);
+                    const remM = Math.floor((remainingMs % 3600000) / 60000);
+
+                    bannerHtml = `
+                        <div class="window-edit-banner window-edit-unlocked">
+                            <span>🟢 Edição Liberada: restam <strong>${remH}h ${remM}min</strong></span>
+                            <span style="font-size: 11px;">Alterações refletem direto na ficha</span>
+                        </div>
+                    `;
+                    botaoAcaoHtml = `
+                        <button type="button" class="btn-edit-action" onclick="iniciarEdicaoMatricula('${matId}')">
+                            <i data-lucide="edit-3" style="width: 15px; height: 15px;"></i>
+                            <span>Editar Meus Dados</span>
+                        </button>
+                    `;
+                } else {
+                    bannerHtml = `
+                        <div class="window-edit-banner window-edit-locked">
+                            <span>🔒 Prazo de edição direta expirado (+6 horas)</span>
+                            <span style="font-size: 11px;">Solicite alteração à coordenação</span>
+                        </div>
+                    `;
+                    botaoAcaoHtml = `
+                        <button type="button" class="btn-request-action" onclick="abrirModalSolicitacao('${matId}', '${escapeQuotes(item.aluno_nome || currentStudentData?.nome)}')">
+                            <i data-lucide="help-circle" style="width: 15px; height: 15px;"></i>
+                            <span>Solicitar Edição ao Pedagógico</span>
+                        </button>
+                    `;
+                }
+
                 const card = document.createElement('div');
                 card.className = 'history-card-item';
                 card.innerHTML = `
@@ -3653,21 +3987,265 @@
                         </div>
                         <span class="history-badge-active">Confirmada</span>
                     </div>
+
+                    ${bannerHtml}
+
                     <div class="history-details-grid">
                         <span><strong>Núcleo:</strong> ${nucNome}</span>
                         <span><strong>Modalidade:</strong> ${modNome}</span>
                         <span><strong>Turno:</strong> ${turno}</span>
-                        <span><strong>Instituto:</strong> IBRASE</span>
+                        <span><strong>Data Registro:</strong> ${item.created_at ? new Date(item.created_at).toLocaleDateString('pt-BR') : 'Hoje'}</span>
                     </div>
-                    <button type="button" class="btn-pdf-print-clean" onclick="emitirFichaOficialPDF('${matId}')">
-                        <i data-lucide="printer" style="width: 15px; height: 15px;"></i>
-                        <span>Baixar Ficha Oficial (PDF)</span>
-                    </button>
+
+                    <div class="history-actions-row">
+                        <button type="button" class="btn-pdf-print-clean" onclick="emitirFichaOficialPDF('${matId}')">
+                            <i data-lucide="printer" style="width: 15px; height: 15px;"></i>
+                            <span>Baixar Ficha Oficial (PDF)</span>
+                        </button>
+                        ${botaoAcaoHtml}
+                    </div>
                 `;
                 container.appendChild(card);
             });
 
             if (window.lucide) lucide.createIcons();
+        }
+
+        let matriculaParaSolicitarEdicao = null;
+
+        function setupModalSolicitacao() {
+            const modal = document.getElementById('modalSolicitarEdicao');
+            const btnFechar = document.getElementById('btnFecharModalEdicao');
+            const btnEnviar = document.getElementById('btnEnviarWhatsAppPedagogico');
+            if (!modal) return;
+
+            if (btnFechar) btnFechar.onclick = () => { modal.style.display = 'none'; };
+            modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+
+            if (btnEnviar) {
+                btnEnviar.onclick = () => {
+                    const motivo = document.getElementById('solicitacao_motivo')?.value.trim();
+                    const zapRetorno = document.getElementById('solicitacao_whatsapp')?.value.trim();
+
+                    if (!motivo) {
+                        alert('Por favor, descreva brevemente o que você deseja alterar.');
+                        document.getElementById('solicitacao_motivo')?.focus();
+                        return;
+                    }
+
+                    const matId = matriculaParaSolicitarEdicao?.id || '';
+                    const alunoNome = matriculaParaSolicitarEdicao?.aluno_nome || currentStudentData?.nome || '';
+                    const alunoCpf = formatarCPF(currentStudentData?.cpf || '');
+
+                    const textoMensagem = `Olá, Coordenação Pedagógica da IBRASE!\n\nSolicito autorização para alteração cadastral referente à matrícula #${matId}.\n\nParticipante: ${alunoNome}\nCPF: ${alunoCpf}\nContato: ${zapRetorno}\n\nO que desejo alterar:\n${motivo}`;
+
+                    const zapUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(textoMensagem)}`;
+                    window.open(zapUrl, '_blank');
+                    modal.style.display = 'none';
+                };
+            }
+        }
+
+        function abrirModalSolicitacao(matId, nomeAluno) {
+            matriculaParaSolicitarEdicao = currentMatriculasList.find(m => String(m.id) === String(matId)) || { id: matId, aluno_nome: nomeAluno };
+            const lbl = document.getElementById('modalMatriculaId');
+            if (lbl) lbl.textContent = '#' + matId;
+            const mot = document.getElementById('solicitacao_motivo');
+            if (mot) mot.value = '';
+            const zap = document.getElementById('solicitacao_whatsapp');
+            if (zap) zap.value = formatarTelefoneValor(matriculaParaSolicitarEdicao.whatsapp || '');
+            const mod = document.getElementById('modalSolicitarEdicao');
+            if (mod) mod.style.display = 'flex';
+        }
+
+        // ── INICIAR EDIÇÃO DE MATRÍCULA (DENTRO DA JANELA DE 6 HORAS) ──
+        function iniciarEdicaoMatricula(matId, fallbackObj = null) {
+            try {
+                let mat = null;
+                if (currentMatriculasList && currentMatriculasList.length > 0) {
+                    mat = currentMatriculasList.find(m => String(m.id) === String(matId) || String(m.matricula) === String(matId));
+                }
+                if (!mat && fallbackObj) {
+                    mat = fallbackObj;
+                }
+                if (!mat && window._ultimoPayloadMatricula) {
+                    mat = window._ultimoPayloadMatricula;
+                }
+
+                if (!mat) {
+                    alert('Inscrição não localizada para edição.');
+                    const paneSucesso = document.getElementById('paneSucessoFinal');
+                    if (paneSucesso) paneSucesso.style.display = 'block';
+                    return;
+                }
+
+                document.getElementById('participantHub').style.display = 'none';
+                const paneSucesso = document.getElementById('paneSucessoFinal');
+                if (paneSucesso) paneSucesso.style.display = 'none';
+                document.getElementById('cardConsultaCPF').style.display = 'none';
+
+                const wrap = document.getElementById('formEnrollmentWrapper');
+                wrap.style.display = 'block';
+
+                // Configura modo edição
+                document.getElementById('bannerModoEdicao').style.display = 'block';
+                const idExibicao = mat.id || mat.matricula || matId;
+                document.getElementById('lblMatriculaEditando').textContent = '#' + idExibicao;
+                document.getElementById('hidden_matricula_id').value = idExibicao;
+                document.getElementById('hidden_modo_edicao').value = 'true';
+                const btnSubmit = document.getElementById('btnSubmitEnroll');
+                if (btnSubmit) btnSubmit.innerHTML = '<i data-lucide="check-circle" style="width:18px;height:18px;"></i> Salvar Alterações';
+
+                const projId = mat.projeto_id || 4;
+                const projNome = mat.projeto_nome || (currentProjectsList?.find(p => String(p.id) === String(projId))?.nome) || 'IBRASE';
+                currentSelectedProject = { id: projId, nome: projNome, idade_min: 6, idade_max: 18 };
+                document.getElementById('formCurrentProjBadge').textContent = projNome;
+                document.getElementById('hidden_projeto_id').value = projId;
+                document.getElementById('hidden_projeto_nome').value = projNome;
+
+                function preencher(id, val) {
+                    const el = document.getElementById(id);
+                    if (el && val !== undefined && val !== null) el.value = val;
+                }
+                function preencherSelect(id, val) {
+                    const el = document.getElementById(id);
+                    if (el && val !== undefined && val !== null) {
+                        const opt = Array.from(el.options).find(o => o.value === String(val) || o.textContent.trim().toLowerCase() === String(val).trim().toLowerCase());
+                        if (opt) el.value = opt.value;
+                    }
+                }
+
+                const nomeAluno = mat.aluno_nome || mat.nome || currentStudentData?.nome || '';
+                const cpfAluno = mat.aluno_cpf || mat.cpf || currentStudentData?.cpf || '';
+                const nascAluno = mat.data_nascimento || mat.nascimento || currentStudentData?.data_nascimento || '';
+
+                preencher('mat_nome', nomeAluno);
+                preencher('mat_cpf', formatarCPF(cpfAluno));
+                preencher('mat_nasc', formatarDataInput(nascAluno));
+                preencher('mat_nome_social', mat.nome_social || '');
+
+                const evNasc = new Event('change');
+                document.getElementById('mat_nasc')?.dispatchEvent(evNasc);
+
+                preencherSelect('mat_sexo', mat.sexo);
+                preencherSelect('mat_raca', mat.raca);
+                preencher('mat_naturalidade', mat.naturalidade || '');
+                preencher('mat_whatsapp', formatarTelefoneValor(mat.whatsapp));
+                preencher('mat_email', mat.email || '');
+                preencher('mat_email_confirm', mat.email || '');
+
+                preencher('mat_resp_cpf', formatarCPF(mat.resp_cpf || ''));
+                preencher('mat_resp_nome', mat.resp_nome || '');
+                preencher('mat_resp_whatsapp', formatarTelefoneValor(mat.resp_whatsapp || ''));
+                preencherSelect('mat_resp_parentesco', mat.grau_parentesco || mat.resp_parentesco || mat.parentesco);
+
+                preencher('mat_cep', mat.cep || '');
+                preencher('mat_endereco', mat.endereco || '');
+                preencher('mat_numero', mat.numero || '');
+                atualizarEstadoSemNumero(mat.numero || '');
+                preencher('mat_complemento', mat.complemento || '');
+                preencher('mat_bairro', mat.bairro || '');
+                preencher('mat_cidade', mat.cidade || '');
+                preencher('mat_uf', mat.uf || 'RJ');
+
+                preencher('mat_altura', mat.altura || '');
+                preencher('mat_peso', mat.peso || '');
+                preencherSelect('mat_escolaridade', mat.escolaridade);
+
+                setHealthOption('med', (mat.uso_medicacao === 'Sim' || mat.uso_medicacao === 'sim') ? 'Sim' : 'Não');
+                const inpMed = document.querySelector('input[name="uso_medicacao_detalhes"]');
+                if (inpMed && mat.uso_medicacao_detalhes) inpMed.value = mat.uso_medicacao_detalhes;
+
+                setHealthOption('alerg', (mat.possui_alergias === 'Sim' || mat.possui_alergias === 'sim') ? 'Sim' : 'Não');
+                const inpAlerg = document.querySelector('input[name="possui_alergias_detalhes"]');
+                if (inpAlerg && mat.possui_alergias_detalhes) inpAlerg.value = mat.possui_alergias_detalhes;
+
+                setHealthOption('plano', (mat.plano_saude === 'Sim' || mat.plano_saude === 'sim') ? 'Sim' : 'Não');
+                const inpPlano = document.querySelector('input[name="plano_saude_detalhes"]');
+                if (inpPlano && mat.plano_saude_detalhes) inpPlano.value = mat.plano_saude_detalhes;
+
+                setHealthOption('trat', (mat.acompan_medico === 'Sim' || mat.acompan_medico === 'sim') ? 'Sim' : 'Não');
+                const inpTrat = document.querySelector('input[name="acompan_medico_detalhes"]');
+                if (inpTrat && mat.acompan_medico_detalhes) inpTrat.value = mat.acompan_medico_detalhes;
+
+                setHealthOption('rest', (mat.restricao_fisica === 'Sim' || mat.restricao_fisica === 'sim') ? 'Sim' : 'Não');
+                const inpRest = document.querySelector('input[name="restricao_fisica_detalhes"]');
+                if (inpRest && mat.restricao_fisica_detalhes) inpRest.value = mat.restricao_fisica_detalhes;
+
+                setHealthOption('esp', (mat.necessidade_especial === 'Sim' || mat.necessidade_especial === 'sim') ? 'Sim' : 'Não');
+                const inpEsp = document.querySelector('input[name="necessidade_especial_detalhes"]');
+                if (inpEsp && mat.necessidade_especial_detalhes) inpEsp.value = mat.necessidade_especial_detalhes;
+
+                preencherSelect('mat_camisa', mat.tamanho_camisa);
+                preencherSelect('mat_bermuda', mat.tamanho_calca);
+                preencherSelect('mat_calcado', mat.tamanho_calcado);
+                preencherSelect('mat_turno', mat.turno);
+
+                carregarCidadesDoProjeto(projId);
+                const cidAlvo = mat.cidade_treino || mat.cidade || '';
+                const selectCid = document.getElementById('select_cidade_filtro');
+                if (selectCid) {
+                    if (cidAlvo && selectCid.querySelector(`option[value="${cidAlvo}"]`)) {
+                        selectCid.value = cidAlvo;
+                    }
+                    carregarModalidadesDaCidade(selectCid.value, projId);
+
+                    setTimeout(() => {
+                        const targetModId = mat.modalidade_id;
+                        const targetModNome = mat.modalidade_nome || mat.modalidade;
+                        const modCards = document.querySelectorAll('.modalidade-sport-card');
+                        let foundCard = null;
+                        modCards.forEach(card => {
+                            const cModId = card.getAttribute('data-mod-id');
+                            const cTitle = card.querySelector('.mod-title')?.textContent?.trim().toLowerCase();
+                            if (targetModId && String(cModId) === String(targetModId)) foundCard = card;
+                            else if (!foundCard && targetModNome && cTitle === targetModNome.toLowerCase()) foundCard = card;
+                        });
+                        if (foundCard) foundCard.click();
+
+                        setTimeout(() => {
+                            const targetNucId = mat.nucleo_id;
+                            const nucCards = document.querySelectorAll('.nucleo-square-tile');
+                            let foundNuc = null;
+                            nucCards.forEach(nc => {
+                                const cNucId = nc.getAttribute('data-id');
+                                if (targetNucId && String(cNucId) === String(targetNucId)) foundNuc = nc;
+                            });
+                            if (foundNuc) foundNuc.click();
+                        }, 100);
+                    }, 100);
+                }
+
+                irParaPasso(1);
+                window.scrollTo({ top: 40, behavior: 'smooth' });
+
+            } catch(e) {
+                console.error('Erro ao abrir modo de edição:', e);
+                alert('Erro ao carregar dados da inscrição: ' + e.message);
+                const wrap = document.getElementById('formEnrollmentWrapper');
+                if (wrap) wrap.style.display = 'block';
+                irParaPasso(1);
+            }
+        }
+
+        function cancelarEdicaoMatricula() {
+            const wrap = document.getElementById('formEnrollmentWrapper');
+            const banner = document.getElementById('bannerModoEdicao');
+            const hiddenModo = document.getElementById('hidden_modo_edicao');
+            const hiddenId = document.getElementById('hidden_matricula_id');
+            const btnSubmit = document.getElementById('btnSubmitEnroll');
+
+            if (banner) banner.style.display = 'none';
+            if (hiddenModo) hiddenModo.value = 'false';
+            if (hiddenId) hiddenId.value = '';
+            if (btnSubmit) {
+                btnSubmit.innerHTML = '<i data-lucide="check-circle" style="width:18px;height:18px;"></i> Concluir Matrícula';
+            }
+            if (wrap) wrap.style.display = 'none';
+
+            const hub = document.getElementById('participantHub');
+            if (hub) hub.style.display = 'flex';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // ── Carregar e Exibir Projetos Abertos ──
@@ -4324,26 +4902,101 @@
                 const idEnvio = calcularIdade(payload.data_nascimento);
                 payload.idade = (idEnvio !== null && idEnvio !== undefined) ? idEnvio : (currentStudentData?.idade || null);
 
+                // Parentesco do Responsável: Garante envio com ambas as chaves para N8N e Supabase
+                const parentescoVal = document.getElementById('mat_resp_parentesco')?.value || payload.resp_parentesco || payload.grau_parentesco || '';
+                payload.grau_parentesco = parentescoVal;
+                payload.resp_parentesco = parentescoVal;
+
+                const isEdicao = (payload.modo_edicao === 'true' || payload.modo_edicao === true) && Boolean(payload.id);
+
                 try {
-                    const resp = await fetch(API.enviarMatricula, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    const json = await resp.json().catch(() => ({}));
-                    const numMatricula = json.id || json.matricula || json.n_inscricao || Math.floor(100000 + Math.random() * 900000);
+                    let json = {};
+                    let numMatricula = payload.id;
+
+                    if (isEdicao) {
+                        payload.id = Number(payload.id);
+                        numMatricula = payload.id;
+
+                        // Envio para webhook oficial de atualização (matriculaatualizar)
+                        const params = new URLSearchParams();
+                        for (let k in payload) {
+                            if (payload[k] !== undefined && payload[k] !== null) {
+                                params.append(k, payload[k]);
+                            }
+                        }
+
+                        // 1. Envio principal via form-urlencoded para o webhook matriculaatualizar
+                        const resp = await fetch(API.atualizarMatricula, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+                            body: params.toString()
+                        });
+                        json = await resp.json().catch(() => ({}));
+
+                        // 2. Envio redundante via JSON para o webhook matriculaatualizar
+                        fetch(API.atualizarMatricula, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        }).catch(() => {});
+
+                    } else {
+                        const resp = await fetch(API.enviarMatricula, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        json = await resp.json().catch(() => ({}));
+                        numMatricula = json.id || json.matricula || json.n_inscricao || Math.floor(100000 + Math.random() * 900000);
+                        payload.id = numMatricula;
+                    }
 
                     // Exibe tela final de sucesso
                     document.getElementById('formEnrollmentWrapper').style.display = 'none';
                     const paneSucesso = document.getElementById('paneSucessoFinal');
                     paneSucesso.style.display = 'block';
 
+                    if (isEdicao) {
+                        const tit = document.getElementById('sucessoTitulo');
+                        if (tit) tit.textContent = 'Inscrição Atualizada com Sucesso!';
+                        const desc = document.getElementById('sucessoDesc');
+                        if (desc) desc.textContent = 'Os dados da sua matrícula foram alterados com êxito na instituição IBRASE.';
+                    } else {
+                        const tit = document.getElementById('sucessoTitulo');
+                        if (tit) tit.textContent = 'Matrícula Realizada com Sucesso!';
+                        const desc = document.getElementById('sucessoDesc');
+                        if (desc) desc.textContent = 'Sua inscrição oficial foi confirmada e registrada no banco de dados da IBRASE.';
+                    }
+
                     document.getElementById('sucessoNumeroMatricula').textContent = `Matrícula Oficial: #${numMatricula}`;
-                    payload.id = numMatricula;
+
+                    // Guarda último payload globalmente para edição imediata
+                    window._ultimoPayloadMatricula = { ...payload };
+
+                    // Garante que o registro esteja no cache de matrículas sem duplicar
+                    if (!currentMatriculasList) currentMatriculasList = [];
+                    const matIdx = currentMatriculasList.findIndex(m => String(m.id) === String(numMatricula));
+                    if (matIdx >= 0) {
+                        currentMatriculasList[matIdx] = { 
+                            ...currentMatriculasList[matIdx], 
+                            ...payload,
+                            id: numMatricula
+                        };
+                    } else {
+                        currentMatriculasList.unshift({ ...payload, id: numMatricula, created_at: new Date().toISOString() });
+                    }
 
                     document.getElementById('btnBaixarPDFSucesso').onclick = () => {
-                        gerarFichaPDFOficialIBRASE(payload);
+                        emitirFichaOficialPDF(numMatricula, payload);
                     };
+
+                    const btnEditarSucesso = document.getElementById('btnEditarAgoraSucesso');
+                    if (btnEditarSucesso) {
+                        btnEditarSucesso.style.display = 'inline-flex';
+                        btnEditarSucesso.onclick = () => {
+                            iniciarEdicaoMatricula(numMatricula, payload);
+                        };
+                    }
 
                     window.scrollTo({ top: 40, behavior: 'smooth' });
 
@@ -4821,25 +5474,39 @@
             }
         }
 
+        function construirNomeArquivoMatricula(d) {
+            const nAluno = (d?.aluno_nome || d?.nome || currentStudentData?.nome || 'Participante').trim();
+            let projNome = (d?.projeto_nome || d?.iniciativa_nome || d?.projeto || currentSelectedProject?.nome || 'IBRASE').trim();
+            const nAlunoLimpo = nAluno.replace(/[\\/:*?"<>|]+/g, ' ').replace(/\s+/g, ' ').trim();
+            let projLimpo = projNome.replace(/[\\/:*?"<>|]+/g, ' ').replace(/\s+/g, ' ').trim();
+            if (!/IBRASE/i.test(projLimpo)) {
+                projLimpo = `${projLimpo} - IBRASE`;
+            }
+            return `Matrícula - ${nAlunoLimpo} - ${projLimpo}`;
+        }
+
         // ── EMISSÃO DA FICHA OFICIAL DE MATRÍCULA EM PDF (2 PÁGINAS) ──
-        async function emitirFichaOficialPDF(matId) {
+        async function emitirFichaOficialPDF(matId, dadosDiretos) {
+            let matData = dadosDiretos || (currentMatriculasList ? currentMatriculasList.find(m => String(m.id) === String(matId)) : null);
+            const tituloInicial = matData ? construirNomeArquivoMatricula(matData) : 'Matrícula - IBRASE';
+
             const win = window.open('', '_blank');
             if (win) {
-                win.document.write('<!DOCTYPE html><html><head><title>Gerando Ficha IBRASE...</title></head><body style="font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:90vh;"><div style="text-align:center;"><h2>⏳ Gerando Ficha Oficial de Matrícula...</h2><p style="color:#666;">Buscando registros autenticados da IBRASE.</p></div></body></html>');
+                win.document.write(`<!DOCTYPE html><html><head><title>${tituloInicial}</title></head><body style="font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:90vh;"><div style="text-align:center;"><h2>⏳ Gerando Ficha Oficial de Matrícula...</h2><p style="color:#666;">Buscando registros autenticados da IBRASE.</p></div></body></html>`);
                 win.document.close();
+                try { win.document.title = tituloInicial; } catch(e){}
             }
 
             try {
-                let matData = currentMatriculasList.find(m => String(m.id) === String(matId));
                 if (!matData) {
-                    const resp = await fetch(`${API.buscarMatriculaId}?id=${encodeURIComponent(matId)}`);
+                    const resp = await fetch(`${API.buscarMatriculaId}?id=${encodeURIComponent(matId)}&instituto=IBRASE`);
                     const json = await resp.json();
                     matData = Array.isArray(json) ? json[0] : (json?.dados || json);
                 }
                 gerarFichaPDFOficialIBRASE(matData || { id: matId }, win);
             } catch(e) {
                 console.error('Erro ao emitir PDF:', e);
-                let fallback = currentMatriculasList.find(m => String(m.id) === String(matId)) || { id: matId };
+                let fallback = currentMatriculasList?.find(m => String(m.id) === String(matId)) || { id: matId };
                 gerarFichaPDFOficialIBRASE(fallback, win);
             }
         }
@@ -4921,7 +5588,7 @@
 
             const nResp = d.resp_nome || '';
             const cResp = formatarCPF(d.resp_cpf || '');
-            const parResp = d.resp_parentesco || '';
+            const parResp = d.grau_parentesco || d.resp_parentesco || d.parentesco || 'Responsável Legal';
 
             const qrUrl = 'https://ibrase.plataformaintegra.com.br/autenticador.html?id=' + numMatricula + '&inst=ibrase';
             const qrImg = 'https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=' + encodeURIComponent(qrUrl);
@@ -4942,13 +5609,16 @@
             }
             const extrasList = Object.values(extrasObj).filter(item => item && (item.titulo || item.pergunta) && item.resposta);
 
+            const tituloArquivo = construirNomeArquivoMatricula(d);
+            try { win.document.title = tituloArquivo; } catch(e){}
+
             win.document.open();
             win.document.write(`
                 <!DOCTYPE html>
                 <html lang="pt-BR">
                 <head>
                     <meta charset="UTF-8">
-                    <title>Ficha Oficial de Matrícula - ${numMatricula}</title>
+                    <title>${tituloArquivo}</title>
                     <style>
                         @page { size: A4; margin: 8mm 10mm; }
                         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -4971,7 +5641,10 @@
                         .sig-col { text-align: center; }
                         .sig-line { border-top: 1.5px solid #333; margin-bottom: 4px; }
                         .page-break { page-break-before: always; }
-                        @media print { .no-print { display: none !important; } }
+                        @media print { 
+                            .no-print { display: none !important; }
+                            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+                        }
                     </style>
                 </head>
                 <body>
