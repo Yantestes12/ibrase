@@ -4282,6 +4282,9 @@
                 }
 
                 const nomeAluno = (mat.aluno_nome || mat.nome || currentStudentData?.nome || '').trim();
+                const cpfAluno = mat.aluno_cpf || mat.cpf || currentStudentData?.cpf || '';
+                const nascAluno = mat.data_nascimento || mat.nascimento || currentStudentData?.data_nascimento || '';
+
                 const isNomeNovo = !nomeAluno || nomeAluno.toLowerCase() === 'novo participante';
                 const inputNome = document.getElementById('mat_nome');
                 if (inputNome) {
