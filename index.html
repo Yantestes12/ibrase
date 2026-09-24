@@ -4216,11 +4216,18 @@
                     }
                 }
 
-                const nomeAluno = mat.aluno_nome || mat.nome || currentStudentData?.nome || '';
-                const cpfAluno = mat.aluno_cpf || mat.cpf || currentStudentData?.cpf || '';
-                const nascAluno = mat.data_nascimento || mat.nascimento || currentStudentData?.data_nascimento || '';
-
-                preencher('mat_nome', nomeAluno);
+                const nomeAluno = (mat.aluno_nome || mat.nome || currentStudentData?.nome || '').trim();
+                const isNomeNovo = !nomeAluno || nomeAluno.toLowerCase() === 'novo participante';
+                const inputNome = document.getElementById('mat_nome');
+                if (inputNome) {
+                    if (isNomeNovo) {
+                        inputNome.value = '';
+                        inputNome.placeholder = 'Digite seu nome completo (obrigatório)';
+                    } else {
+                        inputNome.value = nomeAluno;
+                        inputNome.placeholder = 'Digite o nome completo';
+                    }
+                }
                 preencher('mat_cpf', formatarCPF(cpfAluno));
                 preencher('mat_nasc', formatarDataInput(nascAluno));
                 preencher('mat_nome_social', mat.nome_social || '');
@@ -4537,7 +4544,18 @@
             }
 
             // === Dados básicos do aluno ===
-            preencher('mat_nome', currentStudentData.nome || rec.nome || ultimaMat.aluno_nome);
+            const nomeAlunoOriginal = (currentStudentData?.nome || rec.nome || ultimaMat?.aluno_nome || '').trim();
+            const isNovoParticipante = !nomeAlunoOriginal || nomeAlunoOriginal.toLowerCase() === 'novo participante';
+            const inputNomeMat = document.getElementById('mat_nome');
+            if (inputNomeMat) {
+                if (isNovoParticipante) {
+                    inputNomeMat.value = '';
+                    inputNomeMat.placeholder = 'Digite seu nome completo (obrigatório)';
+                } else {
+                    inputNomeMat.value = nomeAlunoOriginal;
+                    inputNomeMat.placeholder = 'Digite o nome completo';
+                }
+            }
             preencher('mat_cpf', formatarCPF(currentStudentData.cpf));
             if (currentStudentData.data_nascimento || ultimaMat.data_nascimento) {
                 preencher('mat_nasc', formatarDataInput(currentStudentData.data_nascimento || ultimaMat.data_nascimento));
@@ -4933,7 +4951,6 @@
 
                 card.addEventListener('click', () => {
                     if (esgotadoParaAluno) {
-                        alert(`As vagas para o núcleo "${bairroNome}" estão totalmente esgotadas (${infoVagas.inscritos} inscritos para o limite máximo de ${infoVagas.vagasTotais}, incluindo 10% de cadastro de reserva).\n\nPor favor, escolha outro núcleo ou modalidade disponível.`);
                         return;
                     }
 
@@ -5236,8 +5253,23 @@
             const stepEl = document.querySelector(`.form-pane[data-step="${passo}"]`);
             if (!stepEl) return true;
 
-            // Validação de Telefone / WhatsApp e Faixa Etária na Etapa 1
+            // Validação de Nome, Telefone / WhatsApp e Faixa Etária na Etapa 1
             if (passo === 1) {
+                // Validação estrita do Nome Completo (não permite vazio nem "Novo Participante")
+                const nomeInput = document.getElementById('mat_nome');
+                const nomeVal = (nomeInput?.value || '').trim();
+                if (!nomeVal || nomeVal.toLowerCase() === 'novo participante') {
+                    alert('Por favor, informe seu nome completo oficial para prosseguir com a matrícula.');
+                    nomeInput?.focus();
+                    return false;
+                }
+                const partesNome = nomeVal.split(/\s+/).filter(Boolean);
+                if (partesNome.length < 2) {
+                    alert('Por favor, informe seu nome completo (ao menos primeiro nome e sobrenome).');
+                    nomeInput?.focus();
+                    return false;
+                }
+
                 // Validação de Faixa Etária do Projeto Selecionado
                 const nascVal = document.getElementById('mat_nasc')?.value;
                 if (nascVal && currentSelectedProject) {
