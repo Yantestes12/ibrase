@@ -351,6 +351,13 @@
             font-weight: 600;
         }
 
+        .feedback-info {
+            background: rgba(95, 69, 20, 0.08);
+            border: 1px solid rgba(95, 69, 20, 0.2);
+            color: var(--c-marrom-cinza);
+            font-weight: 600;
+        }
+
         /* ── CARTÃO DE BOAS-VINDAS DO PARTICIPANTE ── */
         .student-header-box {
             display: flex;
@@ -1421,6 +1428,35 @@
                         inputmode="numeric"
                     >
                     <button type="button" id="btnClearCPF" class="cpf-btn-clear" title="Limpar">✕</button>
+                </div>
+
+                <!-- CONFIRMAÇÃO VISUAL DO CPF (QUANDO NÃO LOCALIZADO NA BASE/RECEITA) -->
+                <div id="boxConfirmaCPF" style="display: none; margin-bottom: 14px; padding: 14px 16px; background: rgba(203, 172, 105, 0.08); border: 1.5px dashed var(--c-bege, #cbac69); border-radius: var(--radius-input, 8px); animation: fadeIn 0.25s ease;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; color: var(--text-heading, #24640a); font-weight: 700; font-size: 14px;">
+                        <i data-lucide="help-circle" style="width: 18px; height: 18px; flex-shrink: 0;"></i>
+                        <span>Confira o seu CPF</span>
+                    </div>
+                    <p style="font-size: 13px; color: var(--text-body, #1c1c1c); line-height: 1.45; margin-bottom: 10px;">
+                        Não encontramos um cadastro prévio com este documento. Por favor, confira com atenção: <strong>o CPF digitado abaixo está correto?</strong>
+                    </p>
+                    <div style="display: flex; align-items: center; justify-content: space-between; background: var(--bg-card, #ffffff); border: 1px solid var(--border-pencil, #e5ded3); border-radius: 6px; padding: 8px 12px; margin-bottom: 12px;">
+                        <span id="txtConfirmaCPFNum" style="font-family: monospace; font-size: 16px; font-weight: 800; color: var(--text-heading, #24640a); letter-spacing: 0.05em;">
+                            000.000.000-00
+                        </span>
+                        <span style="font-size: 11px; font-weight: 600; color: #166534; background: #dcfce7; padding: 2px 7px; border-radius: 9999px;">
+                            Dígitos Válidos
+                        </span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                        <button type="button" id="btnConfirmarCPFSim" class="btn-primary-clean" style="height: 42px; font-size: 13.5px; width: 100%;">
+                            <i data-lucide="check" style="width: 15px; height: 15px;"></i>
+                            Sim, está correto
+                        </button>
+                        <button type="button" id="btnCorrigirCPFNao" class="btn-secondary-clean" style="height: 42px; font-size: 13.5px; width: 100%;">
+                            <i data-lucide="edit-3" style="width: 14px; height: 14px;"></i>
+                            Corrigir CPF
+                        </button>
+                    </div>
                 </div>
 
                 <!-- CAMPO CONDICIONAL DE DATA DE NASCIMENTO (QUANDO NÃO LOCALIZADO) -->
@@ -3623,14 +3659,50 @@
             return [];
         }
 
+        // ── Validação Rigorosa de CPF Oficial (Receita Federal - Módulo 11) ──
+        function validarCPF(cpf) {
+            if (!cpf) return false;
+            const clean = String(cpf).replace(/\D/g, '');
+            if (clean.length !== 11) return false;
+            
+            // Rejeita sequências de 11 dígitos repetidos (00000000000, 11111111111, ..., 99999999999)
+            if (/^(\d)\1{10}$/.test(clean)) return false;
+            
+            // Rejeita sequências conhecidas falsas
+            if (['12345678909', '01234567890', '98765432100', '12345678901'].includes(clean)) return false;
+
+            // Cálculo do 1º Dígito Verificador
+            let soma = 0;
+            for (let i = 0; i < 9; i++) {
+                soma += parseInt(clean.charAt(i), 10) * (10 - i);
+            }
+            let resto = 11 - (soma % 11);
+            let digito1 = (resto >= 10) ? 0 : resto;
+            if (digito1 !== parseInt(clean.charAt(9), 10)) return false;
+
+            // Cálculo do 2º Dígito Verificador
+            soma = 0;
+            for (let i = 0; i < 10; i++) {
+                soma += parseInt(clean.charAt(i), 10) * (11 - i);
+            }
+            resto = 11 - (soma % 11);
+            let digito2 = (resto >= 10) ? 0 : resto;
+            if (digito2 !== parseInt(clean.charAt(10), 10)) return false;
+
+            return true;
+        }
+
         // ── Máscara e Entrada de CPF ──
         function setupCPFInput() {
             const input = document.getElementById('inputCPF');
             const btnClear = document.getElementById('btnClearCPF');
             const btnConsultar = document.getElementById('btnConsultarCPF');
+            const boxConfirmaCPF = document.getElementById('boxConfirmaCPF');
             const boxDataNasc = document.getElementById('boxDataNascNovo');
             const inputNascNovo = document.getElementById('inputNascNovo');
             const respCpf = document.getElementById('mat_resp_cpf');
+            const btnConfirmarSim = document.getElementById('btnConfirmarCPFSim');
+            const btnCorrigirNao = document.getElementById('btnCorrigirCPFNao');
 
             if (input) {
                 input.addEventListener('input', (e) => {
@@ -3642,21 +3714,32 @@
 
                     if (btnClear) btnClear.style.display = v.length > 0 ? 'flex' : 'none';
 
-                    // Se o usuário editar o CPF, esconde a caixa de nascimento até validar o novo CPF
-                    if (boxDataNasc && boxDataNasc.style.display !== 'none' && v.replace(/\D/g, '').length < 11) {
-                        boxDataNasc.style.display = 'none';
-                        if (inputNascNovo) inputNascNovo.value = '';
-                        const txtEl = document.getElementById('btnConsultarCPFText');
-                        if (txtEl) txtEl.textContent = 'Consultar CPF';
+                    // Se o usuário editar o CPF, esconde caixas de confirmação e nascimento
+                    if (v.replace(/\D/g, '').length < 11) {
+                        if (boxConfirmaCPF) boxConfirmaCPF.style.display = 'none';
+                        if (boxDataNasc && boxDataNasc.style.display !== 'none') {
+                            boxDataNasc.style.display = 'none';
+                            if (inputNascNovo) inputNascNovo.value = '';
+                            const txtEl = document.getElementById('btnConsultarCPFText');
+                            if (txtEl) txtEl.textContent = 'Consultar CPF';
+                        }
+                        if (v.length === 0) esconderFeedback();
                     }
 
                     if (_lastCpfConsultado && v.replace(/\D/g, '') !== _lastCpfConsultado) {
                         _lastCpfConsultado = null;
                         _lastCpfCache = null;
+                        _cpfConfirmadoPeloUsuario = null;
                     }
 
                     const raw = v.replace(/\D/g, '');
                     if (raw.length === 11) {
+                        if (!validarCPF(raw)) {
+                            if (boxConfirmaCPF) boxConfirmaCPF.style.display = 'none';
+                            if (boxDataNasc) boxDataNasc.style.display = 'none';
+                            mostrarFeedback('error', 'Este CPF não é válido ou não existe. Verifique os números digitados.');
+                            return;
+                        }
                         clearTimeout(input._timer);
                         input._timer = setTimeout(() => executarConsultaCPF(raw), 250);
                     }
@@ -3666,7 +3749,15 @@
                     if (e.key === 'Enter') {
                         e.preventDefault();
                         const raw = input.value.replace(/\D/g, '');
-                        if (raw.length === 11) executarConsultaCPF(raw);
+                        if (raw.length === 11) {
+                            if (!validarCPF(raw)) {
+                                mostrarFeedback('error', 'Este CPF não é válido ou não existe. Verifique os números digitados.');
+                                return;
+                            }
+                            executarConsultaCPF(raw);
+                        } else {
+                            mostrarFeedback('error', 'Digite um CPF completo com 11 dígitos.');
+                        }
                     }
                 });
             }
@@ -3676,8 +3767,47 @@
                     if (e.key === 'Enter') {
                         e.preventDefault();
                         const raw = input ? input.value.replace(/\D/g, '') : '';
-                        if (raw.length === 11) executarConsultaCPF(raw);
+                        if (raw.length === 11 && validarCPF(raw)) executarConsultaCPF(raw);
                     }
+                });
+            }
+
+            if (btnConfirmarSim) {
+                btnConfirmarSim.addEventListener('click', () => {
+                    const raw = input ? input.value.replace(/\D/g, '') : '';
+                    if (!validarCPF(raw)) {
+                        mostrarFeedback('error', 'Este CPF não é válido ou não existe. Verifique os números digitados.');
+                        if (boxConfirmaCPF) boxConfirmaCPF.style.display = 'none';
+                        return;
+                    }
+                    _cpfConfirmadoPeloUsuario = raw;
+                    if (boxConfirmaCPF) boxConfirmaCPF.style.display = 'none';
+
+                    const inputNasc = document.getElementById('inputNascNovo');
+                    if (inputNasc && inputNasc.value.trim()) {
+                        executarConsultaCPF(raw);
+                    } else {
+                        if (boxDataNasc) boxDataNasc.style.display = 'block';
+                        const txtEl = document.getElementById('btnConsultarCPFText');
+                        if (txtEl) txtEl.textContent = 'Confirmar Data e Acessar';
+                        mostrarFeedback('success', 'CPF confirmado! Por favor, informe a Data de Nascimento para identificarmos as vagas.');
+                        if (inputNasc) inputNasc.focus();
+                    }
+                });
+            }
+
+            if (btnCorrigirNao) {
+                btnCorrigirNao.addEventListener('click', () => {
+                    _cpfConfirmadoPeloUsuario = null;
+                    _lastCpfConsultado = null;
+                    _lastCpfCache = null;
+                    if (boxConfirmaCPF) boxConfirmaCPF.style.display = 'none';
+                    if (boxDataNasc) boxDataNasc.style.display = 'none';
+                    if (input) {
+                        input.focus();
+                        input.select();
+                    }
+                    mostrarFeedback('info', 'Por favor, confira e digite o CPF correto.');
                 });
             }
 
@@ -3693,6 +3823,14 @@
                     const raw = v.replace(/\D/g, '');
                     const statusEl = document.getElementById('respCpfStatus');
                     if (raw.length === 11) {
+                        if (!validarCPF(raw)) {
+                            if (statusEl) {
+                                statusEl.style.display = 'block';
+                                statusEl.style.color = '#b91c1c';
+                                statusEl.textContent = 'Este CPF de responsável não é válido ou não existe.';
+                            }
+                            return;
+                        }
                         clearTimeout(respCpf._timer);
                         respCpf._timer = setTimeout(() => consultarCPFResponsavel(raw), 300);
                     } else if (statusEl) {
@@ -3708,11 +3846,13 @@
                         input.value = '';
                         input.focus();
                     }
+                    if (boxConfirmaCPF) boxConfirmaCPF.style.display = 'none';
                     if (boxDataNasc) boxDataNasc.style.display = 'none';
                     if (inputNascNovo) inputNascNovo.value = '';
                     const txtEl = document.getElementById('btnConsultarCPFText');
                     if (txtEl) txtEl.textContent = 'Consultar CPF';
                     btnClear.style.display = 'none';
+                    _cpfConfirmadoPeloUsuario = null;
                     _lastCpfConsultado = null;
                     _lastCpfCache = null;
                     esconderFeedback();
@@ -3724,7 +3864,12 @@
                     if (!input) return;
                     const raw = input.value.replace(/\D/g, '');
                     if (raw.length !== 11) {
-                        mostrarFeedback('error', 'Digite um CPF válido com 11 dígitos.');
+                        mostrarFeedback('error', 'Digite um CPF completo com 11 dígitos.');
+                        input.focus();
+                        return;
+                    }
+                    if (!validarCPF(raw)) {
+                        mostrarFeedback('error', 'Este CPF não é válido ou não existe. Verifique os números digitados.');
                         input.focus();
                         return;
                     }
@@ -3742,6 +3887,16 @@
         async function consultarCPFResponsavel(cpfNum) {
             const statusEl = document.getElementById('respCpfStatus');
             const nomeInput = document.getElementById('mat_resp_nome');
+
+            if (!validarCPF(cpfNum)) {
+                if (statusEl) {
+                    statusEl.style.display = 'block';
+                    statusEl.style.color = '#b91c1c';
+                    statusEl.textContent = 'Este CPF de responsável não é válido ou não existe.';
+                }
+                return;
+            }
+
             if (statusEl) {
                 statusEl.style.display = 'block';
                 statusEl.style.color = 'var(--c-grafite)';
@@ -3810,6 +3965,9 @@
             } else if (tipo === 'success') {
                 icon.setAttribute('data-lucide', 'check-circle');
                 icon.classList.remove('spin');
+            } else if (tipo === 'info') {
+                icon.setAttribute('data-lucide', 'info');
+                icon.classList.remove('spin');
             } else {
                 icon.setAttribute('data-lucide', 'alert-circle');
                 icon.classList.remove('spin');
@@ -3825,6 +3983,7 @@
         let _isConsultandoCPF = false;
         let _lastCpfConsultado = null;
         let _lastCpfCache = null;
+        let _cpfConfirmadoPeloUsuario = null;
 
         // Utilitário infalível: fetch com timeout que cobre conexão E parsing do JSON
         async function fetchJsonWithTimeout(url, opts = {}, timeoutMs = 3000) {
@@ -3845,6 +4004,14 @@
         // ── Executar Consulta do CPF e Matrículas Ativas ──
         async function executarConsultaCPF(cpfNum) {
             if (_isConsultandoCPF) return;
+
+            // Validação estrita matemática: bloqueia imediatamente CPFs falsos / sequências repetidas
+            if (!validarCPF(cpfNum)) {
+                mostrarFeedback('error', 'Este CPF não é válido ou não existe. Verifique os números digitados.');
+                const input = document.getElementById('inputCPF');
+                if (input) input.focus();
+                return;
+            }
 
             // Se o mesmo CPF já foi consultado e o aluno só está confirmando a data de nascimento:
             if (_lastCpfConsultado === cpfNum && _lastCpfCache) {
@@ -3919,10 +4086,36 @@
                 const nomeAluno = temNomeBanco || 'Novo Participante';
                 let nascAluno = dadosAluno?.data_nascimento || dadosAluno?.nascimento || (matriculasEncontradas[0]?.data_nascimento) || '';
 
-                // Se não há data de nascimento no cadastro (novo participante), solicita antes de entrar no portal
+                const foiLocalizado = Boolean(temNomeBanco || matriculasEncontradas.length > 0);
+
+                const boxConfirmaCPF = document.getElementById('boxConfirmaCPF');
                 const boxDataNasc = document.getElementById('boxDataNascNovo');
                 const inputNascNovo = document.getElementById('inputNascNovo');
 
+                // Se NÃO foi localizado na base/Receita e o participante ainda não confirmou o documento:
+                if (!foiLocalizado && _cpfConfirmadoPeloUsuario !== cpfNum) {
+                    _lastCpfConsultado = cpfNum;
+                    _lastCpfCache = {
+                        dadosAluno,
+                        matriculasEncontradas,
+                        nomeAluno,
+                        temNomeBanco
+                    };
+
+                    if (boxDataNasc) boxDataNasc.style.display = 'none';
+                    if (boxConfirmaCPF) {
+                        const txtNum = document.getElementById('txtConfirmaCPFNum');
+                        if (txtNum) txtNum.textContent = formatarCPF(cpfNum);
+                        boxConfirmaCPF.style.display = 'block';
+                        if (window.lucide) lucide.createIcons();
+                    }
+                    mostrarFeedback('info', 'Não localizamos um cadastro prévio com este documento. Por favor, confira o seu CPF acima.');
+                    return; // Interrompe aguardando confirmação do participante
+                }
+
+                if (boxConfirmaCPF) boxConfirmaCPF.style.display = 'none';
+
+                // Se não há data de nascimento no cadastro (novo participante), solicita antes de entrar no portal
                 if (!nascAluno) {
                     const dataDigitada = inputNascNovo ? inputNascNovo.value.trim() : '';
                     if (!dataDigitada) {
@@ -5103,8 +5296,31 @@
                 payload.instituto = 'IBRASE';
                 payload.instituicao = 'IBRASE';
                 payload.aluno_nome = payload.nome;
-                payload.aluno_cpf = payload.cpf.replace(/\D/g, '');
+                payload.aluno_cpf = (payload.cpf || '').replace(/\D/g, '');
                 payload.cpf = payload.aluno_cpf;
+
+                if (!validarCPF(payload.cpf)) {
+                    alert('Erro: O CPF do participante (' + payload.cpf + ') não é válido ou não existe. Não é possível concluir a matrícula.');
+                    btnSubmit.disabled = false;
+                    btnSubmit.innerHTML = (payload.modo_edicao === 'true' || payload.modo_edicao === true) ? '<i data-lucide="check-circle" style="width:18px;height:18px;"></i> Salvar Alterações' : '<i data-lucide="check-circle" style="width:18px;height:18px;"></i> Concluir Matrícula';
+                    if (window.lucide) lucide.createIcons();
+                    return;
+                }
+
+                if (payload.resp_cpf) {
+                    const cleanResp = payload.resp_cpf.replace(/\D/g, '');
+                    const blocoResp = document.getElementById('blocoResponsavel');
+                    if (blocoResp && blocoResp.style.display !== 'none' && !validarCPF(cleanResp)) {
+                        alert('Erro: O CPF do responsável legal informado não é válido ou não existe.');
+                        btnSubmit.disabled = false;
+                        btnSubmit.innerHTML = (payload.modo_edicao === 'true' || payload.modo_edicao === true) ? '<i data-lucide="check-circle" style="width:18px;height:18px;"></i> Salvar Alterações' : '<i data-lucide="check-circle" style="width:18px;height:18px;"></i> Concluir Matrícula';
+                        if (window.lucide) lucide.createIcons();
+                        irParaPasso(1);
+                        return;
+                    }
+                    payload.resp_cpf = cleanResp;
+                }
+
                 payload.origem = 'portal_matricula_minimalista';
                 payload.timestamp = new Date().toISOString();
                 delete payload.email_confirm;
@@ -5399,13 +5615,20 @@
                     return false;
                 }
 
+                // Validação estrita do CPF do Participante
+                const cleanAlunoCpf = (document.getElementById('mat_cpf')?.value || currentStudentData?.cpf || '').replace(/\D/g, '');
+                if (!validarCPF(cleanAlunoCpf)) {
+                    alert('O CPF do participante não é válido ou não existe.\nPor favor, retorne à consulta inicial e informe um CPF real.');
+                    return false;
+                }
+
                 // Validação de Responsável Legal (se participante menor de idade)
                 const blocoResp = document.getElementById('blocoResponsavel');
                 if (blocoResp && blocoResp.style.display !== 'none') {
                     const respCpfEl = document.getElementById('mat_resp_cpf');
                     const cleanRespCpf = (respCpfEl?.value || '').replace(/\D/g, '');
-                    if (cleanRespCpf.length !== 11) {
-                        alert('Por favor, informe o CPF completo do responsável legal (11 dígitos).');
+                    if (!validarCPF(cleanRespCpf)) {
+                        alert('O CPF do responsável legal informado não é válido ou não existe.\nPor favor, informe um CPF real com 11 dígitos.');
                         respCpfEl?.focus();
                         return false;
                     }
@@ -5689,6 +5912,8 @@
             currentMatriculasList = [];
             currentSelectedProject = null;
             currentFormStep = 1;
+            const boxConfirmaCPF = document.getElementById('boxConfirmaCPF');
+            if (boxConfirmaCPF) boxConfirmaCPF.style.display = 'none';
             const boxDataNasc = document.getElementById('boxDataNascNovo');
             if (boxDataNasc) boxDataNasc.style.display = 'none';
             const inputNascNovo = document.getElementById('inputNascNovo');
@@ -5701,6 +5926,7 @@
             _isConsultandoCPF = false;
             _lastCpfConsultado = null;
             _lastCpfCache = null;
+            _cpfConfirmadoPeloUsuario = null;
             esconderFeedback();
             atualizarEstadoSemNumero('');
             toggleComplementoObrigatorio(false);
