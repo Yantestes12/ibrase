@@ -3592,7 +3592,7 @@
         function garantirCachesCarregados() {
             if (_promiseCaches) return _promiseCaches;
 
-            const fetchWithTimeout = (url, opts = {}, ms = 2000) => {
+            const fetchWithTimeout = (url, opts = {}, ms = 7000) => {
                 const ctrl = new AbortController();
                 const timer = setTimeout(() => ctrl.abort(), ms);
                 return fetch(url, { ...opts, signal: ctrl.signal })
