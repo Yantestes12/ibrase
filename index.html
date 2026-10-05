@@ -2093,7 +2093,7 @@
     <script>
 
         // ── CONTROLE AUTOMÁTICO DE VERSÃO & LIMPEZA DE CACHE (ZERO CACHE OBSOLETO) ──
-        const APP_BUILD_VERSION = '2026.09.23_ibrase_v6';
+        const APP_BUILD_VERSION = '2026.10.05_ibrase_v7';
         try {
             const lastVer = localStorage.getItem('ibrase_app_version');
             if (lastVer !== APP_BUILD_VERSION) {
@@ -2124,15 +2124,18 @@
         // ── CATÁLOGO OFICIAL DE NÚCLEOS E ESPAÇOS IBRASE (INFALÍVEL - ZERO DOWNTIME) ──
         const NUCLEOS_CATALOGO_OFICIAL = [
         {
-                "id": 161,
-                "projeto_id": 1,
-                "nome": "Parque Oliveira Botelho",
-                "modalidade_id": 5,
-                "espaco_id": 66,
-                "bairro": "",
-                "cidade": "",
-                "ponto_referencia": "",
-                "ativo": true
+                "id": 185,
+                "projeto_id": null,
+                "nome": "Apolo II (Manilha)",
+                "modalidade_id": null,
+                "espaco_id": 71,
+                "bairro": "Apolo II (Manilha)",
+                "cidade": "Itaboraí",
+                "ponto_referencia": "Quadra D",
+                "ativo": false,
+                "vagas": "110",
+                "inscritos": "0",
+                "aceitando_vagas": true
         },
         {
                 "id": 34,
@@ -2140,10 +2143,13 @@
                 "nome": "Vila Flávia",
                 "modalidade_id": null,
                 "espaco_id": 34,
-                "bairro": "",
-                "cidade": "",
+                "bairro": "Vila Flávia",
+                "cidade": "Duque de Caxias",
                 "ponto_referencia": "",
-                "ativo": false
+                "ativo": false,
+                "vagas": "110",
+                "inscritos": "0",
+                "aceitando_vagas": true
         },
         {
                 "id": 36,
@@ -2151,32 +2157,111 @@
                 "nome": "Nova Brasília",
                 "modalidade_id": null,
                 "espaco_id": 36,
-                "bairro": "",
-                "cidade": "",
+                "bairro": "Nova Brasília",
+                "cidade": "Campos dos Goytacazes",
                 "ponto_referencia": "",
-                "ativo": false
+                "ativo": false,
+                "vagas": "110",
+                "inscritos": "0",
+                "aceitando_vagas": true
         },
         {
-                "id": 148,
+                "id": 182,
+                "projeto_id": 2,
+                "nome": "Jardim Limeira",
+                "modalidade_id": 16,
+                "espaco_id": 63,
+                "bairro": "Jardim Limeira",
+                "cidade": "Belford Roxo",
+                "ponto_referencia": "",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 186,
+                "projeto_id": null,
+                "nome": "Outeiro das Pedras",
+                "modalidade_id": null,
+                "espaco_id": 72,
+                "bairro": "Outeiro das Pedras",
+                "cidade": "Itaboraí",
+                "ponto_referencia": "Loteamento Dona Lucinda",
+                "ativo": false,
+                "vagas": "110",
+                "inscritos": "0",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 162,
                 "projeto_id": 3,
-                "nome": "Parque Novo Mundo",
+                "nome": "Chapéu do Sol 2",
                 "modalidade_id": 9,
-                "espaco_id": 80,
-                "bairro": "",
-                "cidade": "",
+                "espaco_id": 91,
+                "bairro": "Chapéu do Sol 2",
+                "cidade": "São João da Barra",
                 "ponto_referencia": "",
-                "ativo": true
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
         },
         {
-                "id": 127,
-                "projeto_id": 1,
-                "nome": "Vila Lage",
-                "modalidade_id": 9,
-                "espaco_id": 60,
-                "bairro": "",
+                "id": 183,
+                "projeto_id": 2,
+                "nome": "Jardim Limeira",
+                "modalidade_id": 16,
+                "espaco_id": 64,
+                "bairro": "Jardim Limeira",
+                "cidade": "Belford Roxo",
+                "ponto_referencia": "",
+                "ativo": false,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 187,
+                "projeto_id": null,
+                "nome": "aa",
+                "modalidade_id": null,
+                "espaco_id": null,
+                "bairro": "aa",
                 "cidade": "",
                 "ponto_referencia": "",
-                "ativo": true
+                "ativo": false,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 149,
+                "projeto_id": 4,
+                "nome": "Santo Eduardo II",
+                "modalidade_id": 5,
+                "espaco_id": 81,
+                "bairro": "Santo Eduardo",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "30",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 163,
+                "projeto_id": 6,
+                "nome": "Parque Penha II",
+                "modalidade_id": 9,
+                "espaco_id": 92,
+                "bairro": "Parque Penha",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "Na praça",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "1",
+                "aceitando_vagas": true
         },
         {
                 "id": 147,
@@ -2184,21 +2269,41 @@
                 "nome": "Parque Presidente Vargas",
                 "modalidade_id": 16,
                 "espaco_id": 79,
-                "bairro": "",
-                "cidade": "",
-                "ponto_referencia": "",
-                "ativo": true
+                "bairro": "Parque Presidente Vargas",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "Praça do Amarelinho",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "18",
+                "aceitando_vagas": true
         },
         {
-                "id": 144,
-                "projeto_id": 3,
-                "nome": "Parque Califórnia",
-                "modalidade_id": 16,
-                "espaco_id": 111,
-                "bairro": "",
-                "cidade": "",
+                "id": 161,
+                "projeto_id": 1,
+                "nome": "Parque Oliveira Botelho",
+                "modalidade_id": 5,
+                "espaco_id": 66,
+                "bairro": "Parque Oliveira Botelho",
+                "cidade": "Campos dos Goytacazes",
                 "ponto_referencia": "",
-                "ativo": true
+                "ativo": true,
+                "vagas": "110",
+                "inscritos": "1",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 127,
+                "projeto_id": 1,
+                "nome": "Vila Lage",
+                "modalidade_id": 9,
+                "espaco_id": 60,
+                "bairro": "Vila Lage",
+                "cidade": "São Gonçalo",
+                "ponto_referencia": "",
+                "ativo": false,
+                "vagas": "110",
+                "inscritos": "0",
+                "aceitando_vagas": true
         },
         {
                 "id": 141,
@@ -2206,21 +2311,55 @@
                 "nome": "Grussaí",
                 "modalidade_id": 16,
                 "espaco_id": 73,
-                "bairro": "",
-                "cidade": "",
-                "ponto_referencia": "",
-                "ativo": true
+                "bairro": "Grussaí",
+                "cidade": "São João da Barra",
+                "ponto_referencia": "Instituto Coração Gigante",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
         },
         {
-                "id": 146,
-                "projeto_id": 3,
-                "nome": "Chapéu do Sol",
+                "id": 164,
+                "projeto_id": 6,
+                "nome": "Goytacazes 2",
                 "modalidade_id": 9,
-                "espaco_id": 78,
-                "bairro": "",
-                "cidade": "",
+                "espaco_id": 93,
+                "bairro": "Goytacazes 2",
+                "cidade": "Campos dos Goytacazes",
                 "ponto_referencia": "",
-                "ativo": true
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 188,
+                "projeto_id": 5,
+                "nome": "Cidade de Deus",
+                "modalidade_id": 9,
+                "espaco_id": 108,
+                "bairro": "Cidade de Deus",
+                "cidade": "Rio de Janeiro",
+                "ponto_referencia": "Campo do Lazer",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 144,
+                "projeto_id": 3,
+                "nome": "Parque Califórnia",
+                "modalidade_id": 16,
+                "espaco_id": 111,
+                "bairro": "Parque Califórnia",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "Praça ao lado do CAPS III Dr. Makhoul Moussallem",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "36",
+                "aceitando_vagas": true
         },
         {
                 "id": 145,
@@ -2228,21 +2367,13 @@
                 "nome": "Barra Seca",
                 "modalidade_id": 9,
                 "espaco_id": 77,
-                "bairro": "",
-                "cidade": "",
+                "bairro": "Barra Seca",
+                "cidade": "São Francisco de Itabapoana",
                 "ponto_referencia": "",
-                "ativo": true
-        },
-        {
-                "id": 143,
-                "projeto_id": 3,
-                "nome": "Santo Eduardo",
-                "modalidade_id": 9,
-                "espaco_id": 75,
-                "bairro": "",
-                "cidade": "",
-                "ponto_referencia": "",
-                "ativo": true
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
         },
         {
                 "id": 142,
@@ -2250,21 +2381,41 @@
                 "nome": "Parque Santuário",
                 "modalidade_id": 9,
                 "espaco_id": 74,
-                "bairro": "",
-                "cidade": "",
-                "ponto_referencia": "",
-                "ativo": true
+                "bairro": "Parque Santuário",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "Distrito de Travessão. De esquina com a Travessa Campista.",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "1",
+                "aceitando_vagas": true
         },
         {
-                "id": 149,
-                "projeto_id": 4,
-                "nome": "Santo Eduardo",
+                "id": 184,
+                "projeto_id": 2,
+                "nome": "Jardim Limeira",
                 "modalidade_id": 5,
-                "espaco_id": 81,
-                "bairro": "",
-                "cidade": "",
+                "espaco_id": 64,
+                "bairro": "Jardim Limeira",
+                "cidade": "Belford Roxo",
                 "ponto_referencia": "",
-                "ativo": true
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 165,
+                "projeto_id": 6,
+                "nome": "Custodopolis 1",
+                "modalidade_id": 9,
+                "espaco_id": 94,
+                "bairro": "Custodopolis 1",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "Estádio Cláudio Nogueira",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "1",
+                "aceitando_vagas": true
         },
         {
                 "id": 150,
@@ -2272,21 +2423,41 @@
                 "nome": "Centro",
                 "modalidade_id": 5,
                 "espaco_id": 82,
-                "bairro": "",
-                "cidade": "",
+                "bairro": "Centro",
+                "cidade": "Quissamã",
                 "ponto_referencia": "",
-                "ativo": true
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
         },
         {
-                "id": 151,
-                "projeto_id": 4,
-                "nome": "Parque Calabouço",
+                "id": 189,
+                "projeto_id": 5,
+                "nome": "Taquara 4",
                 "modalidade_id": 5,
-                "espaco_id": 83,
-                "bairro": "",
-                "cidade": "",
+                "espaco_id": 109,
+                "bairro": "Taquara 4",
+                "cidade": "Rio de Janeiro",
+                "ponto_referencia": "Na igreja SAVE, de esquina com a rua Nicolau Paganini.",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 143,
+                "projeto_id": 3,
+                "nome": "Santo Eduardo",
+                "modalidade_id": 9,
+                "espaco_id": 75,
+                "bairro": "Santo Eduardo",
+                "cidade": "Campos dos Goytacazes",
                 "ponto_referencia": "",
-                "ativo": true
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "40",
+                "aceitando_vagas": true
         },
         {
                 "id": 152,
@@ -2294,10 +2465,97 @@
                 "nome": "Grussaí",
                 "modalidade_id": 5,
                 "espaco_id": 84,
-                "bairro": "",
+                "bairro": "Grussaí",
+                "cidade": "São João da Barra",
+                "ponto_referencia": "Rua da Lagoa",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "10",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 190,
+                "projeto_id": 5,
+                "nome": "Vargem Pequena",
+                "modalidade_id": 5,
+                "espaco_id": 110,
+                "bairro": "Vargem Pequena",
                 "cidade": "",
                 "ponto_referencia": "",
-                "ativo": true
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 166,
+                "projeto_id": 6,
+                "nome": "Parque Novo Mundo II",
+                "modalidade_id": 5,
+                "espaco_id": 95,
+                "bairro": "Parque Novo Mundo",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 167,
+                "projeto_id": 6,
+                "nome": "Goytacazes",
+                "modalidade_id": 5,
+                "espaco_id": 96,
+                "bairro": "Goytacazes",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 148,
+                "projeto_id": 3,
+                "nome": "Parque Novo Mundo",
+                "modalidade_id": 9,
+                "espaco_id": 80,
+                "bairro": "Parque Novo Mundo",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "Estádio Claudio Nogueira",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "6",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 146,
+                "projeto_id": 3,
+                "nome": "Chapéu do Sol 1",
+                "modalidade_id": 9,
+                "espaco_id": 78,
+                "bairro": "Chapéu do Sol 1",
+                "cidade": "São João da Barra",
+                "ponto_referencia": "",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 168,
+                "projeto_id": 6,
+                "nome": "Tocos II",
+                "modalidade_id": 9,
+                "espaco_id": 97,
+                "bairro": "Tocos",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "Em frente ao antigo coleginho.",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
         },
         {
                 "id": 156,
@@ -2305,32 +2563,41 @@
                 "nome": "Nova Canaã",
                 "modalidade_id": 9,
                 "espaco_id": 85,
-                "bairro": "",
+                "bairro": "Nova Canaã",
                 "cidade": "",
                 "ponto_referencia": "",
-                "ativo": false
+                "ativo": false,
+                "vagas": "110",
+                "inscritos": "0",
+                "aceitando_vagas": true
         },
         {
-                "id": 154,
-                "projeto_id": 1,
-                "nome": "Guaxindiba",
+                "id": 151,
+                "projeto_id": 4,
+                "nome": "Parque Calabouço",
                 "modalidade_id": 5,
-                "espaco_id": 70,
-                "bairro": "",
-                "cidade": "",
+                "espaco_id": 83,
+                "bairro": "Parque Calabouço",
+                "cidade": "Campos dos Goytacazes",
                 "ponto_referencia": "",
-                "ativo": true
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
         },
         {
-                "id": 155,
-                "projeto_id": 2,
-                "nome": "Nova Canaã",
-                "modalidade_id": 16,
-                "espaco_id": 26,
-                "bairro": "",
-                "cidade": "",
-                "ponto_referencia": "",
-                "ativo": true
+                "id": 169,
+                "projeto_id": 6,
+                "nome": "Custodopolis 2",
+                "modalidade_id": 5,
+                "espaco_id": 98,
+                "bairro": "Custodopolis 2",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "Estádio Cláudio Nogueira",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
         },
         {
                 "id": 157,
@@ -2338,43 +2605,223 @@
                 "nome": "Colubande",
                 "modalidade_id": 16,
                 "espaco_id": 87,
-                "bairro": "",
-                "cidade": "",
-                "ponto_referencia": "",
-                "ativo": true
+                "bairro": "Colubande",
+                "cidade": "São Gonçalo",
+                "ponto_referencia": "Altos",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 155,
+                "projeto_id": 2,
+                "nome": "Nova Canaã",
+                "modalidade_id": 16,
+                "espaco_id": 26,
+                "bairro": "Nova Canaã",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "Em frente ao campo do Nova Canaã",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "6",
+                "aceitando_vagas": true
         },
         {
                 "id": 158,
                 "projeto_id": 10,
                 "nome": "Parque Califórnia",
                 "modalidade_id": 5,
-                "espaco_id": 86,
-                "bairro": "",
-                "cidade": "",
-                "ponto_referencia": "",
-                "ativo": true
+                "espaco_id": 111,
+                "bairro": "Parque Califórnia",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "Praça ao lado do CAPS III Dr. Makhoul Moussallem",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "12",
+                "aceitando_vagas": true
         },
         {
                 "id": 159,
                 "projeto_id": 4,
-                "nome": "Parque Santo Amaro",
+                "nome": "Parque Santo Amaro III",
                 "modalidade_id": 5,
                 "espaco_id": 88,
-                "bairro": "",
-                "cidade": "",
-                "ponto_referencia": "",
-                "ativo": true
+                "bairro": "Parque Santo Amaro",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "Altos",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
         },
         {
                 "id": 160,
                 "projeto_id": 3,
-                "nome": "Travessão",
+                "nome": "Travessão II",
                 "modalidade_id": 9,
                 "espaco_id": 89,
-                "bairro": "",
-                "cidade": "",
+                "bairro": "Travessão",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "Próximo à Estrada Dom Pedro I",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 170,
+                "projeto_id": 6,
+                "nome": "Parque Salo Brand",
+                "modalidade_id": 9,
+                "espaco_id": 99,
+                "bairro": "Parque Salo Brand",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "Próximo ao CAPS",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 171,
+                "projeto_id": 2,
+                "nome": "Parque Caju",
+                "modalidade_id": 9,
+                "espaco_id": 68,
+                "bairro": "Parque Caju",
+                "cidade": "Campos dos Goytacazes",
                 "ponto_referencia": "",
-                "ativo": true
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 172,
+                "projeto_id": 2,
+                "nome": "São José",
+                "modalidade_id": 9,
+                "espaco_id": 65,
+                "bairro": "São José",
+                "cidade": "Belford Roxo",
+                "ponto_referencia": "",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 173,
+                "projeto_id": 2,
+                "nome": "São José",
+                "modalidade_id": 5,
+                "espaco_id": 65,
+                "bairro": "São José",
+                "cidade": "Belford Roxo",
+                "ponto_referencia": "",
+                "ativo": false,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 176,
+                "projeto_id": 5,
+                "nome": "Bangu",
+                "modalidade_id": 9,
+                "espaco_id": 100,
+                "bairro": "Bangu",
+                "cidade": "Rio de Janeiro",
+                "ponto_referencia": "Campo de Futeol CREIB",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 177,
+                "projeto_id": 5,
+                "nome": "Parque Anchieta",
+                "modalidade_id": 9,
+                "espaco_id": 101,
+                "bairro": "Parque Anchieta",
+                "cidade": "Rio de Janeiro",
+                "ponto_referencia": "Na praça granito",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 154,
+                "projeto_id": 1,
+                "nome": "Guaxindiba",
+                "modalidade_id": 5,
+                "espaco_id": 70,
+                "bairro": "Guaxindiba",
+                "cidade": "São Gonçalo",
+                "ponto_referencia": "",
+                "ativo": true,
+                "vagas": "110",
+                "inscritos": "0",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 178,
+                "projeto_id": 5,
+                "nome": "Honório Gurgel",
+                "modalidade_id": 9,
+                "espaco_id": 102,
+                "bairro": "Honório Gurgel",
+                "cidade": "Rio de Janeiro",
+                "ponto_referencia": "Praça General Sousa Neto, ao lado do GET Fornovo",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 179,
+                "projeto_id": 5,
+                "nome": "Taquara 1",
+                "modalidade_id": 5,
+                "espaco_id": 103,
+                "bairro": "Taquara 1",
+                "cidade": "Rio de Janeiro",
+                "ponto_referencia": "Em cima da farmácia Exata",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 180,
+                "projeto_id": 5,
+                "nome": "Taquara 2",
+                "modalidade_id": 5,
+                "espaco_id": 104,
+                "bairro": "Taquara 2",
+                "cidade": "Rio de Janeiro",
+                "ponto_referencia": "Em cima da farmácia Exata",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 181,
+                "projeto_id": 5,
+                "nome": "Taquara 3",
+                "modalidade_id": 5,
+                "espaco_id": 105,
+                "bairro": "Taquara 3",
+                "cidade": "Rio de Janeiro",
+                "ponto_referencia": "Próximo a Estrada do Rio Grande",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
         },
         {
                 "id": 38,
@@ -2382,10 +2829,13 @@
                 "nome": "Baixa Grande",
                 "modalidade_id": null,
                 "espaco_id": 37,
-                "bairro": "",
-                "cidade": "",
+                "bairro": "Baixa Grande",
+                "cidade": "Campos dos Goytacazes",
                 "ponto_referencia": "",
-                "ativo": false
+                "ativo": false,
+                "vagas": "110",
+                "inscritos": "3",
+                "aceitando_vagas": true
         },
         {
                 "id": 10,
@@ -2393,10 +2843,13 @@
                 "nome": "Wona 2",
                 "modalidade_id": 5,
                 "espaco_id": 10,
-                "bairro": "",
-                "cidade": "",
+                "bairro": "Wona 2",
+                "cidade": "Belford Roxo",
                 "ponto_referencia": "",
-                "ativo": true
+                "ativo": false,
+                "vagas": "100",
+                "inscritos": "77",
+                "aceitando_vagas": true
         },
         {
                 "id": 2,
@@ -2404,10 +2857,13 @@
                 "nome": "Jardim Catarina",
                 "modalidade_id": null,
                 "espaco_id": 2,
-                "bairro": "",
-                "cidade": "",
+                "bairro": "Jardim Catarina",
+                "cidade": "São Gonçalo",
                 "ponto_referencia": "",
-                "ativo": false
+                "ativo": false,
+                "vagas": "110",
+                "inscritos": "31",
+                "aceitando_vagas": true
         },
         {
                 "id": 11,
@@ -2415,10 +2871,13 @@
                 "nome": "Wona 1",
                 "modalidade_id": null,
                 "espaco_id": 11,
-                "bairro": "",
-                "cidade": "",
+                "bairro": "Wona",
+                "cidade": "Belford Roxo",
                 "ponto_referencia": "",
-                "ativo": false
+                "ativo": false,
+                "vagas": "100",
+                "inscritos": "101",
+                "aceitando_vagas": true
         },
         {
                 "id": 26,
@@ -2426,43 +2885,41 @@
                 "nome": "Nova Canaã",
                 "modalidade_id": null,
                 "espaco_id": 7,
-                "bairro": "",
+                "bairro": "Nova Canaã",
                 "cidade": "",
                 "ponto_referencia": "",
-                "ativo": false
+                "ativo": false,
+                "vagas": "100",
+                "inscritos": "122",
+                "aceitando_vagas": true
         },
         {
                 "id": 1,
                 "projeto_id": 1,
-                "nome": "Piedade",
+                "nome": "Goitacazes",
                 "modalidade_id": null,
                 "espaco_id": 1,
-                "bairro": "",
-                "cidade": "",
+                "bairro": "Goitacazes",
+                "cidade": "Campos dos Goytacazes",
                 "ponto_referencia": "",
-                "ativo": false
+                "ativo": false,
+                "vagas": "110",
+                "inscritos": "160",
+                "aceitando_vagas": true
         },
         {
                 "id": 16,
                 "projeto_id": 2,
-                "nome": "Várzea 2",
+                "nome": "Várzea",
                 "modalidade_id": null,
                 "espaco_id": 16,
-                "bairro": "",
-                "cidade": "",
+                "bairro": "Várzea",
+                "cidade": "Teresópolis",
                 "ponto_referencia": "",
-                "ativo": false
-        },
-        {
-                "id": 14,
-                "projeto_id": 2,
-                "nome": "Lote XV 1",
-                "modalidade_id": null,
-                "espaco_id": 14,
-                "bairro": "",
-                "cidade": "",
-                "ponto_referencia": "",
-                "ativo": false
+                "ativo": false,
+                "vagas": "100",
+                "inscritos": "35",
+                "aceitando_vagas": true
         },
         {
                 "id": 22,
@@ -2470,21 +2927,41 @@
                 "nome": "Novo Jockey",
                 "modalidade_id": null,
                 "espaco_id": 22,
-                "bairro": "",
-                "cidade": "",
+                "bairro": "Novo Jockey",
+                "cidade": "Campos dos Goytacazes",
                 "ponto_referencia": "",
-                "ativo": false
+                "ativo": false,
+                "vagas": "100",
+                "inscritos": "90",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 14,
+                "projeto_id": 2,
+                "nome": "Lote XV",
+                "modalidade_id": null,
+                "espaco_id": 14,
+                "bairro": "Lote XV",
+                "cidade": "Belford Roxo",
+                "ponto_referencia": "",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "77",
+                "aceitando_vagas": true
         },
         {
                 "id": 9,
                 "projeto_id": 1,
                 "nome": "Vila Manhães",
-                "modalidade_id": null,
+                "modalidade_id": 5,
                 "espaco_id": 9,
-                "bairro": "",
-                "cidade": "",
+                "bairro": "Vila Manhães",
+                "cidade": "Campos dos Goytacazes",
                 "ponto_referencia": "",
-                "ativo": false
+                "ativo": true,
+                "vagas": "110",
+                "inscritos": "79",
+                "aceitando_vagas": true
         },
         {
                 "id": 7,
@@ -2492,10 +2969,13 @@
                 "nome": "Nova Canaã II",
                 "modalidade_id": 9,
                 "espaco_id": 90,
-                "bairro": "",
-                "cidade": "",
-                "ponto_referencia": "",
-                "ativo": false
+                "bairro": "Nova Canaã",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "Em frente a igreja ACGAPE",
+                "ativo": true,
+                "vagas": "110",
+                "inscritos": "74",
+                "aceitando_vagas": true
         },
         {
                 "id": 25,
@@ -2503,10 +2983,13 @@
                 "nome": "Parque Santo Amaro",
                 "modalidade_id": null,
                 "espaco_id": 25,
-                "bairro": "",
-                "cidade": "",
+                "bairro": "Parque Santo Amaro",
+                "cidade": "Campos dos Goytacazes",
                 "ponto_referencia": "",
-                "ativo": false
+                "ativo": false,
+                "vagas": "100",
+                "inscritos": "88",
+                "aceitando_vagas": true
         },
         {
                 "id": 5,
@@ -2514,21 +2997,27 @@
                 "nome": "Tocos",
                 "modalidade_id": 5,
                 "espaco_id": 69,
-                "bairro": "",
-                "cidade": "",
+                "bairro": "Tocos",
+                "cidade": "Campos dos Goytacazes",
                 "ponto_referencia": "",
-                "ativo": false
+                "ativo": true,
+                "vagas": "110",
+                "inscritos": "69",
+                "aceitando_vagas": true
         },
         {
                 "id": 6,
                 "projeto_id": 1,
-                "nome": "Parque Rodoviário",
-                "modalidade_id": null,
+                "nome": "Parque São Caetano",
+                "modalidade_id": 9,
                 "espaco_id": 6,
-                "bairro": "",
-                "cidade": "",
-                "ponto_referencia": "",
-                "ativo": false
+                "bairro": "Parque São Caetano",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "Na entrada da torre de transmissão",
+                "ativo": true,
+                "vagas": "110",
+                "inscritos": "65",
+                "aceitando_vagas": true
         },
         {
                 "id": 12,
@@ -2536,21 +3025,13 @@
                 "nome": "Parque Fluminense 1",
                 "modalidade_id": 16,
                 "espaco_id": 12,
-                "bairro": "",
-                "cidade": "",
+                "bairro": "Parque Fluminense",
+                "cidade": "Belford Roxo",
                 "ponto_referencia": "",
-                "ativo": true
-        },
-        {
-                "id": 27,
-                "projeto_id": 2,
-                "nome": "Amendoeira",
-                "modalidade_id": null,
-                "espaco_id": 27,
-                "bairro": "",
-                "cidade": "",
-                "ponto_referencia": "",
-                "ativo": false
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "102",
+                "aceitando_vagas": true
         },
         {
                 "id": 31,
@@ -2558,21 +3039,41 @@
                 "nome": "Centro",
                 "modalidade_id": null,
                 "espaco_id": 31,
-                "bairro": "",
-                "cidade": "",
+                "bairro": "Centro",
+                "cidade": "Itaboraí",
                 "ponto_referencia": "",
-                "ativo": false
+                "ativo": false,
+                "vagas": "100",
+                "inscritos": "37",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 27,
+                "projeto_id": 2,
+                "nome": "Travessão",
+                "modalidade_id": null,
+                "espaco_id": 27,
+                "bairro": "Travessão",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "Salão JK",
+                "ativo": false,
+                "vagas": "100",
+                "inscritos": "81",
+                "aceitando_vagas": true
         },
         {
                 "id": 37,
                 "projeto_id": 1,
-                "nome": "Baixa Granda",
+                "nome": "Baixa Grande",
                 "modalidade_id": null,
                 "espaco_id": 37,
-                "bairro": "",
-                "cidade": "",
+                "bairro": "Baixa Grande",
+                "cidade": "Campos dos Goytacazes",
                 "ponto_referencia": "",
-                "ativo": false
+                "ativo": false,
+                "vagas": "110",
+                "inscritos": "2",
+                "aceitando_vagas": true
         },
         {
                 "id": 19,
@@ -2580,10 +3081,13 @@
                 "nome": "Parada 40",
                 "modalidade_id": null,
                 "espaco_id": 19,
-                "bairro": "",
-                "cidade": "",
+                "bairro": "Parada 40",
+                "cidade": "São Gonçalo",
                 "ponto_referencia": "",
-                "ativo": false
+                "ativo": false,
+                "vagas": "100",
+                "inscritos": "127",
+                "aceitando_vagas": true
         },
         {
                 "id": 28,
@@ -2591,43 +3095,55 @@
                 "nome": "Jardim Balneário",
                 "modalidade_id": null,
                 "espaco_id": 28,
-                "bairro": "",
-                "cidade": "",
+                "bairro": "Jardim Balneário",
+                "cidade": "Duque de Caxias",
                 "ponto_referencia": "",
-                "ativo": false
+                "ativo": false,
+                "vagas": "100",
+                "inscritos": "1",
+                "aceitando_vagas": true
         },
         {
                 "id": 29,
                 "projeto_id": 2,
-                "nome": "Aldeia da Prata 1",
+                "nome": "Aldeia da Prata (Manilha)",
                 "modalidade_id": null,
                 "espaco_id": 29,
-                "bairro": "",
-                "cidade": "",
-                "ponto_referencia": "",
-                "ativo": false
+                "bairro": "Aldeia da Prata (Manilha)",
+                "cidade": "Itaboraí",
+                "ponto_referencia": "Campo do Aviãozinho",
+                "ativo": false,
+                "vagas": "100",
+                "inscritos": "56",
+                "aceitando_vagas": true
         },
         {
                 "id": 21,
                 "projeto_id": 2,
-                "nome": "Zumbi",
+                "nome": "Engenho Pequeno",
                 "modalidade_id": null,
                 "espaco_id": 21,
-                "bairro": "",
-                "cidade": "",
+                "bairro": "Engenho Pequeno",
+                "cidade": "São Gonçalo",
                 "ponto_referencia": "",
-                "ativo": false
+                "ativo": false,
+                "vagas": "100",
+                "inscritos": "72",
+                "aceitando_vagas": true
         },
         {
                 "id": 15,
                 "projeto_id": 2,
-                "nome": "Lote XV 2",
+                "nome": "Lote XV II",
                 "modalidade_id": null,
                 "espaco_id": 15,
-                "bairro": "",
-                "cidade": "",
+                "bairro": "Lote XV",
+                "cidade": "Belford Roxo",
                 "ponto_referencia": "",
-                "ativo": false
+                "ativo": false,
+                "vagas": "100",
+                "inscritos": "55",
+                "aceitando_vagas": true
         },
         {
                 "id": 33,
@@ -2635,32 +3151,41 @@
                 "nome": "Monsuaba",
                 "modalidade_id": 9,
                 "espaco_id": 33,
-                "bairro": "",
-                "cidade": "",
-                "ponto_referencia": "",
-                "ativo": true
+                "bairro": "Monsuaba",
+                "cidade": "Angra dos Reis",
+                "ponto_referencia": "Próximo a praia",
+                "ativo": true,
+                "vagas": "110",
+                "inscritos": "85",
+                "aceitando_vagas": true
         },
         {
                 "id": 35,
                 "projeto_id": 1,
                 "nome": "Santo Amaro",
-                "modalidade_id": null,
+                "modalidade_id": 5,
                 "espaco_id": 35,
-                "bairro": "",
-                "cidade": "",
+                "bairro": "Parque Santo Amaro",
+                "cidade": "Campos dos Goytacazes",
                 "ponto_referencia": "",
-                "ativo": false
+                "ativo": true,
+                "vagas": "110",
+                "inscritos": "16",
+                "aceitando_vagas": true
         },
         {
                 "id": 3,
                 "projeto_id": 1,
                 "nome": "Santa Sofia",
-                "modalidade_id": null,
+                "modalidade_id": 9,
                 "espaco_id": 3,
-                "bairro": "",
-                "cidade": "",
-                "ponto_referencia": "",
-                "ativo": false
+                "bairro": "Santa Sofia",
+                "cidade": "Seropédica",
+                "ponto_referencia": "próximo à Escola Municipal Gilson Silva",
+                "ativo": true,
+                "vagas": "110",
+                "inscritos": "85",
+                "aceitando_vagas": true
         },
         {
                 "id": 18,
@@ -2668,32 +3193,27 @@
                 "nome": "Tijuca",
                 "modalidade_id": null,
                 "espaco_id": 18,
-                "bairro": "",
-                "cidade": "",
+                "bairro": "Tijuca",
+                "cidade": "Teresópolis",
                 "ponto_referencia": "",
-                "ativo": false
-        },
-        {
-                "id": 13,
-                "projeto_id": 2,
-                "nome": "Parque Fluminense 2",
-                "modalidade_id": null,
-                "espaco_id": 13,
-                "bairro": "",
-                "cidade": "",
-                "ponto_referencia": "",
-                "ativo": false
+                "ativo": false,
+                "vagas": "100",
+                "inscritos": "62",
+                "aceitando_vagas": true
         },
         {
                 "id": 8,
                 "projeto_id": 1,
                 "nome": "Salo Brand - Centro",
-                "modalidade_id": null,
+                "modalidade_id": 5,
                 "espaco_id": 8,
-                "bairro": "",
-                "cidade": "",
+                "bairro": "Salo Brand - Centro",
+                "cidade": "Campos dos Goytacazes",
                 "ponto_referencia": "",
-                "ativo": false
+                "ativo": true,
+                "vagas": "110",
+                "inscritos": "83",
+                "aceitando_vagas": true
         },
         {
                 "id": 20,
@@ -2701,10 +3221,41 @@
                 "nome": "Tribobó",
                 "modalidade_id": null,
                 "espaco_id": 20,
-                "bairro": "",
-                "cidade": "",
+                "bairro": "Tribobó",
+                "cidade": "São Gonçalo",
                 "ponto_referencia": "",
-                "ativo": false
+                "ativo": false,
+                "vagas": "100",
+                "inscritos": "61",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 13,
+                "projeto_id": 2,
+                "nome": "Parque Fluminense",
+                "modalidade_id": null,
+                "espaco_id": 13,
+                "bairro": "Parque Fluminense",
+                "cidade": "Belford Roxo",
+                "ponto_referencia": "",
+                "ativo": false,
+                "vagas": "100",
+                "inscritos": "108",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 4,
+                "projeto_id": 1,
+                "nome": "Tapera",
+                "modalidade_id": 9,
+                "espaco_id": 4,
+                "bairro": "Tapera",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "loteamento morada da tapera",
+                "ativo": true,
+                "vagas": "110",
+                "inscritos": "77",
+                "aceitando_vagas": true
         },
         {
                 "id": 126,
@@ -2712,87 +3263,97 @@
                 "nome": "Parque Eldorado",
                 "modalidade_id": 9,
                 "espaco_id": 59,
-                "bairro": "",
-                "cidade": "",
-                "ponto_referencia": "",
-                "ativo": true
+                "bairro": "Parque Eldorado",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "Ao lado da igreja universal",
+                "ativo": true,
+                "vagas": "110",
+                "inscritos": "69",
+                "aceitando_vagas": true
         },
         {
-                "id": 4,
-                "projeto_id": 1,
-                "nome": "Tapera",
+                "id": 17,
+                "projeto_id": 2,
+                "nome": "Várzea II",
                 "modalidade_id": null,
-                "espaco_id": 4,
-                "bairro": "",
-                "cidade": "",
+                "espaco_id": 17,
+                "bairro": "Várzea",
+                "cidade": "Teresópolis",
                 "ponto_referencia": "",
-                "ativo": false
+                "ativo": false,
+                "vagas": "100",
+                "inscritos": "49",
+                "aceitando_vagas": true
         },
         {
                 "id": 32,
                 "projeto_id": 1,
                 "nome": "Pavuna",
-                "modalidade_id": null,
+                "modalidade_id": 9,
                 "espaco_id": 32,
-                "bairro": "",
-                "cidade": "",
+                "bairro": "Pavuna",
+                "cidade": "Rio de Janeiro",
                 "ponto_referencia": "",
-                "ativo": false
-        },
-        {
-                "id": 24,
-                "projeto_id": 2,
-                "nome": "Penha",
-                "modalidade_id": null,
-                "espaco_id": 24,
-                "bairro": "",
-                "cidade": "",
-                "ponto_referencia": "",
-                "ativo": false
-        },
-        {
-                "id": 17,
-                "projeto_id": 2,
-                "nome": "Várzea 1",
-                "modalidade_id": null,
-                "espaco_id": 17,
-                "bairro": "",
-                "cidade": "",
-                "ponto_referencia": "",
-                "ativo": false
-        },
-        {
-                "id": 23,
-                "projeto_id": 2,
-                "nome": "Aeroporto",
-                "modalidade_id": null,
-                "espaco_id": 23,
-                "bairro": "",
-                "cidade": "",
-                "ponto_referencia": "",
-                "ativo": false
-        },
-        {
-                "id": 30,
-                "projeto_id": 2,
-                "nome": "Aldeia da Prata 2",
-                "modalidade_id": null,
-                "espaco_id": 30,
-                "bairro": "",
-                "cidade": "",
-                "ponto_referencia": "",
-                "ativo": false
+                "ativo": true,
+                "vagas": "110",
+                "inscritos": "95",
+                "aceitando_vagas": true
         },
         {
                 "id": 128,
                 "projeto_id": 1,
                 "nome": "Jardim Palmares",
-                "modalidade_id": 9,
+                "modalidade_id": 5,
                 "espaco_id": 61,
-                "bairro": "",
-                "cidade": "",
-                "ponto_referencia": "",
-                "ativo": true
+                "bairro": "Jardim Palmares",
+                "cidade": "Nova Iguaçu",
+                "ponto_referencia": "Campo dois de ouro",
+                "ativo": false,
+                "vagas": "110",
+                "inscritos": "1",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 23,
+                "projeto_id": 2,
+                "nome": "Aeroporto",
+                "modalidade_id": 9,
+                "espaco_id": 23,
+                "bairro": "Aeroporto",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "O espaço compreende um campos de futebol, de frente para a quadra do AP",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "124",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 24,
+                "projeto_id": 2,
+                "nome": "Parque Penha",
+                "modalidade_id": 9,
+                "espaco_id": 24,
+                "bairro": "Parque Penha",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "Em frente ao depósito de bebidas Bom de Bola",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "106",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 30,
+                "projeto_id": 2,
+                "nome": "Aldeia da Prata (Manilha)",
+                "modalidade_id": null,
+                "espaco_id": 30,
+                "bairro": "Aldeia da Prata (Manilha)",
+                "cidade": "Itaboraí",
+                "ponto_referencia": "Loja 8",
+                "ativo": false,
+                "vagas": "100",
+                "inscritos": "65",
+                "aceitando_vagas": true
         },
         {
                 "id": 129,
@@ -2800,10 +3361,13 @@
                 "nome": "Piedade",
                 "modalidade_id": 5,
                 "espaco_id": 62,
-                "bairro": "",
-                "cidade": "",
-                "ponto_referencia": "",
-                "ativo": true
+                "bairro": "Piedade",
+                "cidade": "Rio de Janeiro",
+                "ponto_referencia": "Nos fundos da Arena Várzea Clube (Várzea Country Clube).",
+                "ativo": true,
+                "vagas": "110",
+                "inscritos": "9",
+                "aceitando_vagas": true
         }
 ];
 
@@ -2842,24 +3406,13 @@
                 "ativo": false
         },
         {
-                "id": 8,
-                "nome": "Salo Brand - Centro",
-                "bairro": "Salo Brand - Centro",
+                "id": 69,
+                "nome": "Tocos",
+                "bairro": "Tocos",
                 "cidade": "Campos dos Goytacazes",
-                "rua": "Av. Rui Barbosa",
-                "numero": "263",
-                "cep": "28013000",
-                "ponto_referencia": "",
-                "ativo": true
-        },
-        {
-                "id": 68,
-                "nome": "Parque Caju",
-                "bairro": "Parque Caju",
-                "cidade": "Campos dos Goytacazes",
-                "rua": "Rua Luiz Faria de Azevedo",
-                "numero": "38",
-                "cep": "28051020",
+                "rua": "Avenida Miguel Rinald",
+                "numero": "49",
+                "cep": "28148000",
                 "ponto_referencia": "",
                 "ativo": true
         },
@@ -2886,17 +3439,6 @@
                 "ativo": true
         },
         {
-                "id": 69,
-                "nome": "Tocos",
-                "bairro": "Tocos",
-                "cidade": "Campos dos Goytacazes",
-                "rua": "Avenida Miguel Rinald",
-                "numero": "49",
-                "cep": "28148000",
-                "ponto_referencia": "",
-                "ativo": true
-        },
-        {
                 "id": 15,
                 "nome": "Lote XV II",
                 "bairro": "Lote XV",
@@ -2908,6 +3450,17 @@
                 "ativo": true
         },
         {
+                "id": 68,
+                "nome": "Parque Caju",
+                "bairro": "Parque Caju",
+                "cidade": "Campos dos Goytacazes",
+                "rua": "Rua Luiz Faria de Azevedo",
+                "numero": "38",
+                "cep": "28051020",
+                "ponto_referencia": "",
+                "ativo": false
+        },
+        {
                 "id": 63,
                 "nome": "Jardim Limeira",
                 "bairro": "Jardim Limeira",
@@ -2915,6 +3468,17 @@
                 "rua": "Estrada da Ligação",
                 "numero": "1196",
                 "cep": "26187180",
+                "ponto_referencia": "",
+                "ativo": false
+        },
+        {
+                "id": 8,
+                "nome": "Salo Brand - Centro",
+                "bairro": "Salo Brand - Centro",
+                "cidade": "Campos dos Goytacazes",
+                "rua": "Av. Rui Barbosa",
+                "numero": "263",
+                "cep": "28013000",
                 "ponto_referencia": "",
                 "ativo": true
         },
@@ -2930,26 +3494,26 @@
                 "ativo": true
         },
         {
-                "id": 14,
-                "nome": "Lote XV II",
-                "bairro": "Lote XV",
-                "cidade": "Belford Roxo",
-                "rua": "Rua Ademário Ferreira da Silva",
-                "numero": "163",
-                "cep": "26183440",
-                "ponto_referencia": "",
+                "id": 111,
+                "nome": "Parque Califórnia",
+                "bairro": "Parque Califórnia",
+                "cidade": "Campos dos Goytacazes",
+                "rua": "Rua Idolino Nunes Brasileiro",
+                "numero": "S/N",
+                "cep": "28015130",
+                "ponto_referencia": "Praça ao lado do CAPS III Dr. Makhoul Moussallem",
                 "ativo": true
         },
         {
-                "id": 5,
-                "nome": "Tócos",
-                "bairro": "Tócos",
-                "cidade": "Campos dos Goytacazes",
+                "id": 10,
+                "nome": "Wona 2",
+                "bairro": "Wona 2",
+                "cidade": "Belford Roxo",
                 "rua": "",
                 "numero": "",
                 "cep": "",
                 "ponto_referencia": "",
-                "ativo": true
+                "ativo": false
         },
         {
                 "id": 4,
@@ -2964,35 +3528,13 @@
         },
         {
                 "id": 24,
-                "nome": "Parque Penha II",
+                "nome": "Parque Penha",
                 "bairro": "Parque Penha",
                 "cidade": "Campos dos Goytacazes",
                 "rua": "Rua Salim Assad",
                 "numero": "S/N",
                 "cep": "28021480",
                 "ponto_referencia": "Em frente ao depósito de bebidas Bom de Bola",
-                "ativo": true
-        },
-        {
-                "id": 64,
-                "nome": "Jardim Limeira II",
-                "bairro": "Jardim Limeira",
-                "cidade": "Belford Roxo",
-                "rua": "Estrada da Ligação",
-                "numero": "1196",
-                "cep": "26187180",
-                "ponto_referencia": "",
-                "ativo": true
-        },
-        {
-                "id": 10,
-                "nome": "Wona 2",
-                "bairro": "Wona 2",
-                "cidade": "Belford Roxo",
-                "rua": "",
-                "numero": "",
-                "cep": "",
-                "ponto_referencia": "",
                 "ativo": true
         },
         {
@@ -3016,17 +3558,6 @@
                 "cep": "26277600",
                 "ponto_referencia": "Campo dois de ouro",
                 "ativo": false
-        },
-        {
-                "id": 25,
-                "nome": "Parque Santo Amaro II",
-                "bairro": "Parque Santo Amaro",
-                "cidade": "Campos dos Goytacazes",
-                "rua": "Rua Aluízio Palmeira Escobar",
-                "numero": "36",
-                "cep": "28030085",
-                "ponto_referencia": "",
-                "ativo": true
         },
         {
                 "id": 9,
@@ -3150,36 +3681,14 @@
                 "ativo": true
         },
         {
-                "id": 30,
-                "nome": "Aldeia da Prata (Manilha) II",
-                "bairro": "Aldeia da Prata (Manilha)",
-                "cidade": "Itaboraí",
-                "rua": "Rua Seis",
-                "numero": "169",
-                "cep": "24858068",
-                "ponto_referencia": "Loja 8",
-                "ativo": true
-        },
-        {
                 "id": 27,
-                "nome": "Travessão II",
+                "nome": "Travessão",
                 "bairro": "Travessão",
                 "cidade": "Campos dos Goytacazes",
                 "rua": "Rua Constantino da Bragança",
                 "numero": "72",
                 "cep": "28175000",
                 "ponto_referencia": "Salão JK",
-                "ativo": true
-        },
-        {
-                "id": 23,
-                "nome": "Aeroporto",
-                "bairro": "Aeroporto",
-                "cidade": "Campos dos Goytacazes",
-                "rua": "Rua Gama Barros",
-                "numero": "S/N",
-                "cep": "28090240",
-                "ponto_referencia": "O espaço compreende um campos de futebol, de frente para a quadra do AP",
                 "ativo": true
         },
         {
@@ -3191,17 +3700,17 @@
                 "numero": "184",
                 "cep": "26187180",
                 "ponto_referencia": "",
-                "ativo": true
+                "ativo": false
         },
         {
-                "id": 13,
-                "nome": "Parque Fluminense II",
-                "bairro": "Parque Fluminense",
-                "cidade": "Belford Roxo",
-                "rua": "Rua Iembo",
-                "numero": "197",
-                "cep": "26185205",
-                "ponto_referencia": "",
+                "id": 23,
+                "nome": "Aeroporto",
+                "bairro": "Aeroporto",
+                "cidade": "Campos dos Goytacazes",
+                "rua": "Rua Gama Barros",
+                "numero": "S/N",
+                "cep": "28090240",
+                "ponto_referencia": "O espaço compreende um campos de futebol, de frente para a quadra do AP",
                 "ativo": true
         },
         {
@@ -3294,7 +3803,7 @@
         },
         {
                 "id": 16,
-                "nome": "Várzea II",
+                "nome": "Várzea",
                 "bairro": "Várzea",
                 "cidade": "Teresópolis",
                 "rua": "Rua Manoel José Lebrão",
@@ -3337,6 +3846,17 @@
                 "ativo": false
         },
         {
+                "id": 78,
+                "nome": "Chapéu do Sol 1",
+                "bairro": "Chapéu do Sol 1",
+                "cidade": "São João da Barra",
+                "rua": "Rua A",
+                "numero": "162",
+                "cep": "28200000",
+                "ponto_referencia": "",
+                "ativo": true
+        },
+        {
                 "id": 77,
                 "nome": "Barra Seca",
                 "bairro": "Barra Seca",
@@ -3348,25 +3868,14 @@
                 "ativo": false
         },
         {
-                "id": 78,
-                "nome": "Chapéu do Sol",
-                "bairro": "Chapéu do Sol",
-                "cidade": "São João da Barra",
-                "rua": "Rua A",
-                "numero": "162",
-                "cep": "28200000",
+                "id": 82,
+                "nome": "Centro",
+                "bairro": "Centro",
+                "cidade": "Quissamã",
+                "rua": "Rua João Batista",
+                "numero": "200",
+                "cep": "28735085",
                 "ponto_referencia": "",
-                "ativo": false
-        },
-        {
-                "id": 79,
-                "nome": "Parque Presidente Vargas",
-                "bairro": "Parque Presidente Vargas",
-                "cidade": "Campos dos Goytacazes",
-                "rua": "Rua Pedro Melo",
-                "numero": "67",
-                "cep": "28040435",
-                "ponto_referencia": "Praça do Amarelinho",
                 "ativo": false
         },
         {
@@ -3392,25 +3901,14 @@
                 "ativo": false
         },
         {
-                "id": 82,
-                "nome": "Centro III",
-                "bairro": "Centro",
-                "cidade": "Quissamã",
-                "rua": "Rua João Batista",
-                "numero": "200",
-                "cep": "28735085",
-                "ponto_referencia": "",
-                "ativo": false
-        },
-        {
-                "id": 111,
-                "nome": "Parque Califórnia",
-                "bairro": "Parque Califórnia",
+                "id": 79,
+                "nome": "Parque Presidente Vargas",
+                "bairro": "Parque Presidente Vargas",
                 "cidade": "Campos dos Goytacazes",
-                "rua": "Rua Idolino Nunes Brasileiro",
-                "numero": "S/N",
-                "cep": "28015130",
-                "ponto_referencia": "Praça ao lado do CAPS III Dr. Makhoul Moussallem",
+                "rua": "Rua Pedro Melo",
+                "numero": "67",
+                "cep": "28040435",
+                "ponto_referencia": "Praça do Amarelinho",
                 "ativo": true
         },
         {
@@ -3425,28 +3923,6 @@
                 "ativo": false
         },
         {
-                "id": 84,
-                "nome": "Grussaí II",
-                "bairro": "Grussaí",
-                "cidade": "São João da Barra",
-                "rua": "Rua São Pedro",
-                "numero": "389",
-                "cep": "28200000",
-                "ponto_referencia": "Rua da Lagoa",
-                "ativo": false
-        },
-        {
-                "id": 59,
-                "nome": "Parque Eldorado",
-                "bairro": "Parque Eldorado",
-                "cidade": "Campos dos Goytacazes",
-                "rua": "Rua Jorge José Teixeira",
-                "numero": "S/N",
-                "cep": "28090020",
-                "ponto_referencia": "Ao lado da igreja universal",
-                "ativo": true
-        },
-        {
                 "id": 89,
                 "nome": "Travessão II",
                 "bairro": "Travessão",
@@ -3456,17 +3932,6 @@
                 "cep": "28175000",
                 "ponto_referencia": "Próximo à Estrada Dom Pedro I",
                 "ativo": false
-        },
-        {
-                "id": 90,
-                "nome": "Nova Canaã II",
-                "bairro": "Nova Canaã",
-                "cidade": "Campos dos Goytacazes",
-                "rua": "Rua Dois",
-                "numero": "S/N",
-                "cep": "28175000",
-                "ponto_referencia": "Em frente a igreja ACGAPE",
-                "ativo": true
         },
         {
                 "id": 87,
@@ -3480,17 +3945,6 @@
                 "ativo": false
         },
         {
-                "id": 70,
-                "nome": "Guaxindiba",
-                "bairro": "Guaxindiba",
-                "cidade": "São Gonçalo",
-                "rua": "Rua Laudelino Freire",
-                "numero": "64",
-                "cep": "24722180",
-                "ponto_referencia": "",
-                "ativo": true
-        },
-        {
                 "id": 88,
                 "nome": "Parque Santo Amaro III",
                 "bairro": "Parque Santo Amaro",
@@ -3499,6 +3953,17 @@
                 "numero": "36",
                 "cep": "28030085",
                 "ponto_referencia": "Altos",
+                "ativo": false
+        },
+        {
+                "id": 84,
+                "nome": "Grussaí",
+                "bairro": "Grussaí",
+                "cidade": "São João da Barra",
+                "rua": "Rua São Pedro",
+                "numero": "389",
+                "cep": "28200000",
+                "ponto_referencia": "Rua da Lagoa",
                 "ativo": false
         },
         {
@@ -3513,6 +3978,28 @@
                 "ativo": true
         },
         {
+                "id": 70,
+                "nome": "Guaxindiba",
+                "bairro": "Guaxindiba",
+                "cidade": "São Gonçalo",
+                "rua": "Rua Laudelino Freire",
+                "numero": "64",
+                "cep": "24722180",
+                "ponto_referencia": "",
+                "ativo": true
+        },
+        {
+                "id": 90,
+                "nome": "Nova Canaã II",
+                "bairro": "Nova Canaã",
+                "cidade": "Campos dos Goytacazes",
+                "rua": "Rua Dois",
+                "numero": "S/N",
+                "cep": "28175000",
+                "ponto_referencia": "Em frente a igreja ACGAPE",
+                "ativo": true
+        },
+        {
                 "id": 66,
                 "nome": "Parque Oliveira Botelho",
                 "bairro": "Parque Oliveira Botelho",
@@ -3521,7 +4008,271 @@
                 "numero": "155",
                 "cep": "28013290",
                 "ponto_referencia": "",
+                "ativo": true
+        },
+        {
+                "id": 91,
+                "nome": "Chapéu do Sol 2",
+                "bairro": "Chapéu do Sol 2",
+                "cidade": "São João da Barra",
+                "rua": "Rua A",
+                "numero": "162",
+                "cep": "28200000",
+                "ponto_referencia": "",
                 "ativo": false
+        },
+        {
+                "id": 92,
+                "nome": "Parque Penha II",
+                "bairro": "Parque Penha",
+                "cidade": "Campos dos Goytacazes",
+                "rua": "Rua Onze",
+                "numero": "S/N",
+                "cep": "28021660",
+                "ponto_referencia": "Na praça",
+                "ativo": true
+        },
+        {
+                "id": 59,
+                "nome": "Parque Eldorado",
+                "bairro": "Parque Eldorado",
+                "cidade": "Campos dos Goytacazes",
+                "rua": "Rua Jorge José Teixeira",
+                "numero": "S/N",
+                "cep": "28090020",
+                "ponto_referencia": "Ao lado da igreja universal",
+                "ativo": true
+        },
+        {
+                "id": 97,
+                "nome": "Tocos II",
+                "bairro": "Tocos",
+                "cidade": "Campos dos Goytacazes",
+                "rua": "Rodovia Sérgio Barroso",
+                "numero": "S/N",
+                "cep": "28023654",
+                "ponto_referencia": "Em frente ao antigo coleginho.",
+                "ativo": true
+        },
+        {
+                "id": 93,
+                "nome": "Goytacazes 2",
+                "bairro": "Goytacazes 2",
+                "cidade": "Campos dos Goytacazes",
+                "rua": "Rodovia Sérgio Viana Barroso",
+                "numero": "710",
+                "cep": "28100000",
+                "ponto_referencia": "",
+                "ativo": true
+        },
+        {
+                "id": 94,
+                "nome": "Custodopolis 1",
+                "bairro": "Custodopolis 1",
+                "cidade": "Campos dos Goytacazes",
+                "rua": "Rua Patrício Menezes",
+                "numero": "17",
+                "cep": "28085070",
+                "ponto_referencia": "Estádio Cláudio Nogueira",
+                "ativo": true
+        },
+        {
+                "id": 98,
+                "nome": "Custodopolis 2",
+                "bairro": "Custodopolis 2",
+                "cidade": "Campos dos Goytacazes",
+                "rua": "Rua Patrício Menezes",
+                "numero": "17",
+                "cep": "28085070",
+                "ponto_referencia": "Estádio Cláudio Nogueira",
+                "ativo": true
+        },
+        {
+                "id": 100,
+                "nome": "Bangu",
+                "bairro": "Bangu",
+                "cidade": "Rio de Janeiro",
+                "rua": "Rua Marechal Marciano",
+                "numero": "S/N",
+                "cep": "21721011",
+                "ponto_referencia": "Campo de Futeol CREIB",
+                "ativo": false
+        },
+        {
+                "id": 105,
+                "nome": "Taquara 3",
+                "bairro": "Taquara 3",
+                "cidade": "Rio de Janeiro",
+                "rua": "Caminho Tancredo Neves",
+                "numero": "25",
+                "cep": "22723525",
+                "ponto_referencia": "Próximo a Estrada do Rio Grande",
+                "ativo": false
+        },
+        {
+                "id": 101,
+                "nome": "Parque Anchieta",
+                "bairro": "Parque Anchieta",
+                "cidade": "Rio de Janeiro",
+                "rua": "Praça Granito",
+                "numero": "S/N",
+                "cep": "21625190",
+                "ponto_referencia": "Na praça granito",
+                "ativo": true
+        },
+        {
+                "id": 102,
+                "nome": "Honório Gurgel",
+                "bairro": "Honório Gurgel",
+                "cidade": "Rio de Janeiro",
+                "rua": "Rua Brigadeiro Falcão",
+                "numero": "S/N",
+                "cep": "21512230",
+                "ponto_referencia": "Praça General Sousa Neto, ao lado do GET Fornovo",
+                "ativo": false
+        },
+        {
+                "id": 103,
+                "nome": "Taquara 1",
+                "bairro": "Taquara 1",
+                "cidade": "Rio de Janeiro",
+                "rua": "Estrada Curumau",
+                "numero": "663",
+                "cep": "22723000",
+                "ponto_referencia": "Em cima da farmácia Exata",
+                "ativo": false
+        },
+        {
+                "id": 104,
+                "nome": "Taquara 2",
+                "bairro": "Taquara 2",
+                "cidade": "Rio de Janeiro",
+                "rua": "Estrada Curumau",
+                "numero": "663",
+                "cep": "22723000",
+                "ponto_referencia": "Em cima da farmácia Exata",
+                "ativo": false
+        },
+        {
+                "id": 25,
+                "nome": "Parque Santo Amaro",
+                "bairro": "Parque Santo Amaro",
+                "cidade": "Campos dos Goytacazes",
+                "rua": "Rua Aluízio Palmeira Escobar",
+                "numero": "36",
+                "cep": "28030085",
+                "ponto_referencia": "",
+                "ativo": true
+        },
+        {
+                "id": 95,
+                "nome": "Parque Novo Mundo II",
+                "bairro": "Parque Novo Mundo",
+                "cidade": "Campos dos Goytacazes",
+                "rua": "Rua Francisco Lobo da Costa",
+                "numero": "63",
+                "cep": "28083430",
+                "ponto_referencia": "",
+                "ativo": true
+        },
+        {
+                "id": 14,
+                "nome": "Lote XV",
+                "bairro": "Lote XV",
+                "cidade": "Belford Roxo",
+                "rua": "Rua Ademário Ferreira da Silva",
+                "numero": "163",
+                "cep": "26183440",
+                "ponto_referencia": "",
+                "ativo": true
+        },
+        {
+                "id": 13,
+                "nome": "Parque Fluminense",
+                "bairro": "Parque Fluminense",
+                "cidade": "Belford Roxo",
+                "rua": "Rua Iembo",
+                "numero": "197",
+                "cep": "26185205",
+                "ponto_referencia": "",
+                "ativo": true
+        },
+        {
+                "id": 64,
+                "nome": "Jardim Limeira",
+                "bairro": "Jardim Limeira",
+                "cidade": "Belford Roxo",
+                "rua": "Estrada da Ligação",
+                "numero": "1196",
+                "cep": "26187180",
+                "ponto_referencia": "",
+                "ativo": false
+        },
+        {
+                "id": 30,
+                "nome": "Aldeia da Prata (Manilha)",
+                "bairro": "Aldeia da Prata (Manilha)",
+                "cidade": "Itaboraí",
+                "rua": "Rua Seis",
+                "numero": "169",
+                "cep": "24858068",
+                "ponto_referencia": "Loja 8",
+                "ativo": true
+        },
+        {
+                "id": 107,
+                "nome": "aa",
+                "bairro": "aa",
+                "cidade": "",
+                "rua": "a",
+                "numero": "1",
+                "cep": "22121211",
+                "ponto_referencia": "",
+                "ativo": true
+        },
+        {
+                "id": 108,
+                "nome": "Cidade de Deus",
+                "bairro": "Cidade de Deus",
+                "cidade": "Rio de Janeiro",
+                "rua": "Avenida José de ArimAtéia",
+                "numero": "60",
+                "cep": "22773570",
+                "ponto_referencia": "Campo do Lazer",
+                "ativo": true
+        },
+        {
+                "id": 109,
+                "nome": "Taquara 4",
+                "bairro": "Taquara 4",
+                "cidade": "Rio de Janeiro",
+                "rua": "Estrada dos Bandeirantes",
+                "numero": "1743",
+                "cep": "22775111",
+                "ponto_referencia": "Na igreja SAVE, de esquina com a rua Nicolau Paganini.",
+                "ativo": true
+        },
+        {
+                "id": 99,
+                "nome": "Parque Salo Brand",
+                "bairro": "Parque Salo Brand",
+                "cidade": "Campos dos Goytacazes",
+                "rua": "Rua Everton paes da Cunh",
+                "numero": "S/N",
+                "cep": "28015160",
+                "ponto_referencia": "Próximo ao CAPS",
+                "ativo": true
+        },
+        {
+                "id": 96,
+                "nome": "Goytacazes",
+                "bairro": "Goytacazes",
+                "cidade": "Campos dos Goytacazes",
+                "rua": "Rua José Osório da Silva",
+                "numero": "32",
+                "cep": "28055190",
+                "ponto_referencia": "",
+                "ativo": true
         }
 ];
 
@@ -3592,7 +4343,7 @@
         function garantirCachesCarregados() {
             if (_promiseCaches) return _promiseCaches;
 
-            const fetchWithTimeout = (url, opts = {}, ms = 7000) => {
+            const fetchWithTimeout = (url, opts = {}, ms = 15000) => {
                 const ctrl = new AbortController();
                 const timer = setTimeout(() => ctrl.abort(), ms);
                 return fetch(url, { ...opts, signal: ctrl.signal })
@@ -4647,6 +5398,10 @@
                         (n.espaco_id && String(e.id) === String(n.espaco_id)) || 
                         (n.bairro_id && String(e.id) === String(n.bairro_id)) || 
                         (n.nome && e.nome && n.nome.trim().toLowerCase() === e.nome.trim().toLowerCase())
+                    ) || ESPACOS_CATALOGO_OFICIAL.find(e => 
+                        (n.espaco_id && String(e.id) === String(n.espaco_id)) || 
+                        (n.bairro_id && String(e.id) === String(n.bairro_id)) || 
+                        (n.nome && e.nome && n.nome.trim().toLowerCase() === e.nome.trim().toLowerCase())
                     );
                     return (esp?.cidade && String(esp.cidade).trim()) || (n.cidade && String(n.cidade).trim()) || '';
                 }
@@ -4882,6 +5637,10 @@
                     (n.espaco_id && String(e.id) === String(n.espaco_id)) || 
                     (n.bairro_id && String(e.id) === String(n.bairro_id)) || 
                     (n.nome && e.nome && n.nome.trim().toLowerCase() === e.nome.trim().toLowerCase())
+                ) || ESPACOS_CATALOGO_OFICIAL.find(e => 
+                    (n.espaco_id && String(e.id) === String(n.espaco_id)) || 
+                    (n.bairro_id && String(e.id) === String(n.bairro_id)) || 
+                    (n.nome && e.nome && n.nome.trim().toLowerCase() === e.nome.trim().toLowerCase())
                 );
                 return (esp?.cidade && String(esp.cidade).trim()) || (n.cidade && String(n.cidade).trim()) || '';
             }
@@ -5031,7 +5790,11 @@
             modalidades.forEach(m => { if (m.id && m.nome) modMap[m.id] = m.nome; });
 
             function resolverEspaco(n) {
-                return espacos.find(e => 
+                return (espacos || []).find(e => 
+                    (n.espaco_id && String(e.id) === String(n.espaco_id)) || 
+                    (n.bairro_id && String(e.id) === String(n.bairro_id)) || 
+                    (n.nome && e.nome && n.nome.trim().toLowerCase() === e.nome.trim().toLowerCase())
+                ) || (ESPACOS_CATALOGO_OFICIAL || []).find(e => 
                     (n.espaco_id && String(e.id) === String(n.espaco_id)) || 
                     (n.bairro_id && String(e.id) === String(n.bairro_id)) || 
                     (n.nome && e.nome && n.nome.trim().toLowerCase() === e.nome.trim().toLowerCase())
@@ -5148,6 +5911,10 @@
 
             function resolverEspaco(n) {
                 return (espacos || []).find(e => 
+                    (n.espaco_id && String(e.id) === String(n.espaco_id)) || 
+                    (n.bairro_id && String(e.id) === String(n.bairro_id)) || 
+                    (n.nome && e.nome && n.nome.trim().toLowerCase() === e.nome.trim().toLowerCase())
+                ) || (ESPACOS_CATALOGO_OFICIAL || []).find(e => 
                     (n.espaco_id && String(e.id) === String(n.espaco_id)) || 
                     (n.bairro_id && String(e.id) === String(n.bairro_id)) || 
                     (n.nome && e.nome && n.nome.trim().toLowerCase() === e.nome.trim().toLowerCase())
