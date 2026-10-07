@@ -2093,7 +2093,7 @@
     <script>
 
         // ── CONTROLE AUTOMÁTICO DE VERSÃO & LIMPEZA DE CACHE (ZERO CACHE OBSOLETO) ──
-        const APP_BUILD_VERSION = '2026.10.06_ibrase_v10';
+        const APP_BUILD_VERSION = '2026.10.07_ibrase_v11';
         try {
             const lastVer = localStorage.getItem('ibrase_app_version');
             if (lastVer !== APP_BUILD_VERSION) {
@@ -2116,7 +2116,7 @@
             buscarModalidades: 'https://w.ibrase.com.br/webhook/buscarmodalidade',
             buscarMatriculas: 'https://w.ibrase.com.br/webhook/matriculas-get?instituto=IBRASE&t=' + Date.now(),
             buscarMatriculaId: 'https://w.ibrase.com.br/webhook/buscarmatricula',
-            enviarMatricula: 'https://w.ibrase.com.br/webhook/matricula',
+            enviarMatricula: 'https://w.ibrase.com.br/webhook/matricula-v2',
             atualizarMatricula: 'https://w.ibrase.com.br/webhook/matriculaatualizar',
             consultarCEP: 'https://viacep.com.br/ws/'
         };
