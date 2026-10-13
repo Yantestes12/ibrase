@@ -4421,6 +4421,59 @@
             return [];
         }
 
+        // ── RESOLUÇÃO HIERÁRQUICA E INFALÍVEL DE ESPAÇOS E NÚCLEOS ──
+        function resolverEspacoDoNucleo(n, listaEspacos) {
+            if (!n) return null;
+            const fontes = [
+                listaEspacos,
+                (typeof _cacheEspacos !== 'undefined' ? _cacheEspacos : null),
+                (typeof ESPACOS_CATALOGO_OFICIAL !== 'undefined' ? ESPACOS_CATALOGO_OFICIAL : null)
+            ].filter(arr => Array.isArray(arr) && arr.length > 0);
+
+            // 1. PRIORIDADE MÁXIMA: Match ESTRITO por espaco_id (Chave Estrangeira direta)
+            if (n.espaco_id) {
+                for (const lista of fontes) {
+                    const achou = lista.find(e => e && String(e.id) === String(n.espaco_id));
+                    if (achou) return achou;
+                }
+            }
+
+            // 2. SEGUNDA PRIORIDADE: Match por bairro_id (ID do espaço em tabelas legadas)
+            if (n.bairro_id) {
+                for (const lista of fontes) {
+                    const achou = lista.find(e => e && String(e.id) === String(n.bairro_id));
+                    if (achou) return achou;
+                }
+            }
+
+            // 3. TERCEIRA PRIORIDADE: Se não há ID, match por projeto_id + nome
+            if (n.nome) {
+                const nomeNorm = String(n.nome).trim().toLowerCase();
+                if (n.projeto_id) {
+                    for (const lista of fontes) {
+                        const achou = lista.find(e => 
+                            e && e.projeto_id && String(e.projeto_id) === String(n.projeto_id) &&
+                            e.nome && String(e.nome).trim().toLowerCase() === nomeNorm
+                        );
+                        if (achou) return achou;
+                    }
+                }
+
+                // 4. ÚLTIMO RECURSO: Match apenas por nome
+                for (const lista of fontes) {
+                    const achou = lista.find(e => e && e.nome && String(e.nome).trim().toLowerCase() === nomeNorm);
+                    if (achou) return achou;
+                }
+            }
+
+            return null;
+        }
+
+        function resolverCidadeDoNucleo(n, listaEspacos) {
+            const esp = resolverEspacoDoNucleo(n, listaEspacos);
+            return (esp?.cidade && String(esp.cidade).trim()) || (n?.cidade && String(n.cidade).trim()) || '';
+        }
+
         // ── Validação de Padrões Falsos e Sequências de CPF ──
         function validarCPF(cpf) {
             if (!cpf) return false;
@@ -4946,13 +4999,26 @@
             
             const allNucleos = [...(_cacheNucleos || []), ...(NUCLEOS_CATALOGO_OFICIAL || [])];
             
-            // 1. Procura núcleo correspondente por ID ou Nome/Bairro
-            const nucleoEncontrado = allNucleos.find(n => 
-                (item.nucleo_id && String(n.id) === String(item.nucleo_id)) ||
-                (item.nucleo && n.nome && n.nome.toLowerCase() === String(item.nucleo).toLowerCase()) ||
-                (item.nucleo_nome && n.nome && n.nome.toLowerCase() === String(item.nucleo_nome).toLowerCase()) ||
-                (item.bairro && n.bairro && n.bairro.toLowerCase() === String(item.bairro).toLowerCase())
-            );
+            // 1. Procura núcleo correspondente por ID rigoroso primeiro
+            let nucleoEncontrado = null;
+            if (item.nucleo_id) {
+                nucleoEncontrado = allNucleos.find(n => n && String(n.id) === String(item.nucleo_id));
+            }
+            if (!nucleoEncontrado && item.projeto_id) {
+                const nNome = (item.nucleo_nome || item.nucleo || item.bairro || '').trim().toLowerCase();
+                if (nNome) {
+                    nucleoEncontrado = allNucleos.find(n => 
+                        n && String(n.projeto_id) === String(item.projeto_id) &&
+                        n.nome && String(n.nome).trim().toLowerCase() === nNome
+                    );
+                }
+            }
+            if (!nucleoEncontrado) {
+                const nNome = (item.nucleo_nome || item.nucleo || item.bairro || '').trim().toLowerCase();
+                if (nNome) {
+                    nucleoEncontrado = allNucleos.find(n => n && n.nome && String(n.nome).trim().toLowerCase() === nNome);
+                }
+            }
 
             const nucNome = item.nucleo_nome || item.nucleo || (nucleoEncontrado ? nucleoEncontrado.nome : null) || (item.bairro || 'Núcleo Central');
 
@@ -5405,16 +5471,7 @@
                 const todosEspacos = (_cacheEspacos && _cacheEspacos.length > 0) ? _cacheEspacos : [...ESPACOS_CATALOGO_OFICIAL];
 
                 function resolverCidadeAux(n) {
-                    const esp = todosEspacos.find(e => 
-                        (n.espaco_id && String(e.id) === String(n.espaco_id)) || 
-                        (n.bairro_id && String(e.id) === String(n.bairro_id)) || 
-                        (n.nome && e.nome && n.nome.trim().toLowerCase() === e.nome.trim().toLowerCase())
-                    ) || ESPACOS_CATALOGO_OFICIAL.find(e => 
-                        (n.espaco_id && String(e.id) === String(n.espaco_id)) || 
-                        (n.bairro_id && String(e.id) === String(n.bairro_id)) || 
-                        (n.nome && e.nome && n.nome.trim().toLowerCase() === e.nome.trim().toLowerCase())
-                    );
-                    return (esp?.cidade && String(esp.cidade).trim()) || (n.cidade && String(n.cidade).trim()) || '';
+                    return resolverCidadeDoNucleo(n, todosEspacos);
                 }
 
                 let totalProjetosExibidos = 0;
@@ -5643,17 +5700,8 @@
             const nucleos = (_cacheNucleos && _cacheNucleos.length > 0) ? _cacheNucleos : [...NUCLEOS_CATALOGO_OFICIAL];
             const espacos = (_cacheEspacos && _cacheEspacos.length > 0) ? _cacheEspacos : [...ESPACOS_CATALOGO_OFICIAL];
 
-            function resolverCidadeDoNucleo(n) {
-                const esp = espacos.find(e => 
-                    (n.espaco_id && String(e.id) === String(n.espaco_id)) || 
-                    (n.bairro_id && String(e.id) === String(n.bairro_id)) || 
-                    (n.nome && e.nome && n.nome.trim().toLowerCase() === e.nome.trim().toLowerCase())
-                ) || ESPACOS_CATALOGO_OFICIAL.find(e => 
-                    (n.espaco_id && String(e.id) === String(n.espaco_id)) || 
-                    (n.bairro_id && String(e.id) === String(n.bairro_id)) || 
-                    (n.nome && e.nome && n.nome.trim().toLowerCase() === e.nome.trim().toLowerCase())
-                );
-                return (esp?.cidade && String(esp.cidade).trim()) || (n.cidade && String(n.cidade).trim()) || '';
+            function resolverCidadeDoProjetoLocal(n) {
+                return resolverCidadeDoNucleo(n, espacos);
             }
 
             // Filtra APENAS os núcleos pertencentes ao projeto que estejam RIGOROSAMENTE ATIVOS
@@ -5666,7 +5714,7 @@
             // Coleta cidades únicas de forma limpa
             const cidadesSet = new Set();
             nucleosDoProj.forEach(n => {
-                const c = resolverCidadeDoNucleo(n);
+                const c = resolverCidadeDoProjetoLocal(n);
                 if (c) cidadesSet.add(c);
             });
 
@@ -5801,20 +5849,11 @@
             modalidades.forEach(m => { if (m.id && m.nome) modMap[m.id] = m.nome; });
 
             function resolverEspaco(n) {
-                return (espacos || []).find(e => 
-                    (n.espaco_id && String(e.id) === String(n.espaco_id)) || 
-                    (n.bairro_id && String(e.id) === String(n.bairro_id)) || 
-                    (n.nome && e.nome && n.nome.trim().toLowerCase() === e.nome.trim().toLowerCase())
-                ) || (ESPACOS_CATALOGO_OFICIAL || []).find(e => 
-                    (n.espaco_id && String(e.id) === String(n.espaco_id)) || 
-                    (n.bairro_id && String(e.id) === String(n.bairro_id)) || 
-                    (n.nome && e.nome && n.nome.trim().toLowerCase() === e.nome.trim().toLowerCase())
-                );
+                return resolverEspacoDoNucleo(n, espacos);
             }
 
             function resolverCidade(n) {
-                const esp = resolverEspaco(n);
-                return (esp && esp.cidade && String(esp.cidade).trim()) || (n.cidade && String(n.cidade).trim()) || '';
+                return resolverCidadeDoNucleo(n, espacos);
             }
 
             const pIdNum = parseInt(projId);
@@ -5921,21 +5960,14 @@
             }
 
             function resolverEspaco(n) {
-                return (espacos || []).find(e => 
-                    (n.espaco_id && String(e.id) === String(n.espaco_id)) || 
-                    (n.bairro_id && String(e.id) === String(n.bairro_id)) || 
-                    (n.nome && e.nome && n.nome.trim().toLowerCase() === e.nome.trim().toLowerCase())
-                ) || (ESPACOS_CATALOGO_OFICIAL || []).find(e => 
-                    (n.espaco_id && String(e.id) === String(n.espaco_id)) || 
-                    (n.bairro_id && String(e.id) === String(n.bairro_id)) || 
-                    (n.nome && e.nome && n.nome.trim().toLowerCase() === e.nome.trim().toLowerCase())
-                );
+                return resolverEspacoDoNucleo(n, espacos);
             }
 
             ativos.forEach((n, idx) => {
                 const esp = resolverEspaco(n);
                 const bairroNome = (n.nome && n.nome.trim() && n.nome !== 'temp') ? n.nome.trim() : ((esp?.bairro && esp.bairro !== 'temp') ? esp.bairro : (esp?.nome || 'Núcleo Central'));
-                const refLocal = n.ponto_referencia || esp?.ponto_referencia || esp?.endereco || esp?.rua || 'Núcleo Oficial IBRASE';
+                const espEnd = esp?.rua ? (esp.rua + (esp.numero ? ', ' + esp.numero : '')) : (esp?.endereco || null);
+                const refLocal = n.ponto_referencia || (esp?.ponto_referencia ? (esp.ponto_referencia + (espEnd ? ' — ' + espEnd : '')) : espEnd) || 'Núcleo Oficial IBRASE';
 
                 const infoVagas = calcularVagasNucleo(n);
 
