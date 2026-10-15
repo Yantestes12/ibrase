@@ -4963,7 +4963,10 @@
                     data_nascimento: nascAluno,
                     idade: idadeAluno,
                     dados_recentes: dadosAluno?.dados_recentes || {},
-                    projetos_inscritos_ids: dadosAluno?.projetos_inscritos_ids || matriculasEncontradas.map(m => m.projeto_id).filter(Boolean)
+                    projetos_inscritos_ids: dadosAluno?.projetos_inscritos_ids || matriculasEncontradas.map(m => m.projeto_id).filter(Boolean),
+                    origem_consultada: foiLocalizado,
+                    nome_oficial: temNomeBanco ? nomeAluno : null,
+                    nasc_oficial: nascAluno || null
                 };
 
                 mostrarFeedback('success', temNomeBanco ? `Identificado: ${nomeAluno}` : `Data confirmada (${idadeAluno} anos)! Redirecionando...`);
@@ -5214,6 +5217,47 @@
             if (mod) mod.style.display = 'flex';
         }
 
+        // ── TRAVAR/DESTRAVAR CAMPOS DE IDENTIDADE (NOME E DATA DE NASCIMENTO VINCULADOS AO CPF) ──
+        function travarCampoIdentidade(id, travar, motivoTexto) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            const parent = el.parentElement;
+            const avisoId = id + '_aviso_travado';
+            let avisoEl = document.getElementById(avisoId);
+
+            if (travar) {
+                el.readOnly = true;
+                el.style.backgroundColor = '#f1f5f9';
+                el.style.color = '#334155';
+                el.style.cursor = 'not-allowed';
+                el.style.fontWeight = '700';
+                if (el.type === 'date') {
+                    el.style.pointerEvents = 'none';
+                    el.tabIndex = -1;
+                }
+                if (!avisoEl && parent) {
+                    avisoEl = document.createElement('div');
+                    avisoEl.id = avisoId;
+                    avisoEl.style.cssText = 'display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; color: #475569; margin-top: 5px; background: #e2e8f0; padding: 2px 8px; border-radius: 6px;';
+                    avisoEl.innerHTML = `🔒 ${motivoTexto || 'Vinculado ao CPF consultado (não pode ser alterado)'}`;
+                    parent.appendChild(avisoEl);
+                }
+            } else {
+                el.readOnly = false;
+                el.style.backgroundColor = '';
+                el.style.color = '';
+                el.style.cursor = '';
+                el.style.fontWeight = '';
+                if (el.type === 'date') {
+                    el.style.pointerEvents = '';
+                    el.tabIndex = 0;
+                }
+                if (avisoEl) {
+                    avisoEl.remove();
+                }
+            }
+        }
+
         // ── INICIAR EDIÇÃO DE MATRÍCULA (DENTRO DA JANELA DE 6 HORAS) ──
         async function iniciarEdicaoMatricula(matId, fallbackObj = null) {
             try {
@@ -5307,13 +5351,20 @@
                     if (isNomeNovo) {
                         inputNome.value = '';
                         inputNome.placeholder = 'Digite seu nome completo (obrigatório)';
+                        travarCampoIdentidade('mat_nome', false);
                     } else {
                         inputNome.value = nomeAluno;
                         inputNome.placeholder = 'Digite o nome completo';
+                        travarCampoIdentidade('mat_nome', true, 'Nome oficial vinculado ao CPF (bloqueado para edição)');
                     }
                 }
                 preencher('mat_cpf', formatarCPF(cpfAluno));
-                preencher('mat_nasc', formatarDataInput(nascAluno));
+                if (nascAluno) {
+                    preencher('mat_nasc', formatarDataInput(nascAluno));
+                    travarCampoIdentidade('mat_nasc', true, 'Data oficial vinculada ao CPF (bloqueada para edição)');
+                } else {
+                    travarCampoIdentidade('mat_nasc', false);
+                }
                 preencher('mat_nome_social', mat.nome_social || '');
 
                 const evNasc = new Event('change');
@@ -5639,14 +5690,20 @@
                 if (isNovoParticipante) {
                     inputNomeMat.value = '';
                     inputNomeMat.placeholder = 'Digite seu nome completo (obrigatório)';
+                    travarCampoIdentidade('mat_nome', false);
                 } else {
                     inputNomeMat.value = nomeAlunoOriginal;
                     inputNomeMat.placeholder = 'Digite o nome completo';
+                    travarCampoIdentidade('mat_nome', true, 'Nome oficial vinculado ao CPF (bloqueado para edição)');
                 }
             }
             preencher('mat_cpf', formatarCPF(currentStudentData.cpf));
-            if (currentStudentData.data_nascimento || ultimaMat.data_nascimento) {
-                preencher('mat_nasc', formatarDataInput(currentStudentData.data_nascimento || ultimaMat.data_nascimento));
+            const dataNascOriginal = currentStudentData?.data_nascimento || ultimaMat?.data_nascimento;
+            if (dataNascOriginal) {
+                preencher('mat_nasc', formatarDataInput(dataNascOriginal));
+                travarCampoIdentidade('mat_nasc', true, 'Data oficial vinculada ao CPF (bloqueada para edição)');
+            } else {
+                travarCampoIdentidade('mat_nasc', false);
             }
             preencher('mat_nome_social', rec.nome_social || ultimaMat.nome_social);
             preencherSelect('mat_sexo', rec.sexo || ultimaMat.sexo);
@@ -6166,6 +6223,16 @@
                 }
                 const idEnvio = calcularIdade(payload.data_nascimento);
                 payload.idade = (idEnvio !== null && idEnvio !== undefined) ? idEnvio : (currentStudentData?.idade || null);
+
+                // Se o participante já foi identificado na consulta do CPF, blinda o Nome e Data de Nascimento oficiais
+                if (currentStudentData?.origem_consultada && currentStudentData?.nome_oficial) {
+                    payload.nome = currentStudentData.nome_oficial;
+                    payload.aluno_nome = currentStudentData.nome_oficial;
+                }
+                if (currentStudentData?.origem_consultada && currentStudentData?.nasc_oficial) {
+                    payload.data_nascimento = formatarDataInput(currentStudentData.nasc_oficial);
+                    payload.idade = calcularIdade(payload.data_nascimento);
+                }
 
                 // Parentesco do Responsável: Garante envio com ambas as chaves para N8N e Supabase
                 const parentescoVal = document.getElementById('mat_resp_parentesco')?.value || payload.resp_parentesco || payload.grau_parentesco || '';
