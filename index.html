@@ -6017,8 +6017,19 @@
         }
 
         // ── Carregar e Exibir Projetos Abertos ──
+        // ── Catálogo Oficial de Segurança de Projetos (Garante exibição imediata em 0ms mesmo com oscilação de rede) ──
+        const PROJETOS_CATALOGO_OFICIAL = [
+            { id: 5, nome: "EROS", ativo: true, idade_min: 7, idade_max: 20, descricao: "Desenvolvimento esportivo e educacional." },
+            { id: 10, nome: "CRESP II", ativo: true, idade_min: 7, idade_max: 65, descricao: "Atividades esportivas e bem-estar comunitário." },
+            { id: 3, nome: "AGON", ativo: true, idade_min: 7, idade_max: 65, descricao: "Iniciação esportiva e desenvolvimento motor." },
+            { id: 4, nome: "TONUS", ativo: true, idade_min: 7, idade_max: 19, descricao: "Práticas esportivas e condicionamento físico." },
+            { id: 6, nome: "STRATOS", ativo: true, idade_min: 7, idade_max: 18, descricao: "Futebol e formação cidadã." },
+            { id: 1, nome: "PROMOV", ativo: true, idade_min: 7, idade_max: 15, descricao: "Atividades recreativas e esportivas." },
+            { id: 2, nome: "CRESP", ativo: true, idade_min: 7, idade_max: 65, descricao: "Esporte, saúde e integração comunitária." }
+        ];
+
         // ── Pré-carregamento Antecipado de Projetos (0ms de espera ao entrar) ──
-        let _prefetchedProjetos = null;
+        let _prefetchedProjetos = [...PROJETOS_CATALOGO_OFICIAL];
         function prefetchProjetos() {
             if (_prefetchedProjetos) return;
             const url = API.buscarProjetos;
@@ -6027,7 +6038,7 @@
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ instituto: 'IBRASE', instituicao: 'IBRASE' })
-            }, 6000).then(data => {
+            }, 15000).then(data => {
                 if (data) {
                     const lista = Array.isArray(data) ? (data[0]?.projetos || data) : (data?.projetos || []);
                     if (lista && lista.length > 0) _prefetchedProjetos = lista;
@@ -6057,11 +6068,15 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ instituto: 'IBRASE', instituicao: 'IBRASE' })
                 }, 8000);
-                const projetos = Array.isArray(data) ? (data[0]?.projetos || data) : (data?.projetos || []);
+                let projetos = Array.isArray(data) ? (data[0]?.projetos || data) : (data?.projetos || []);
+                if (!projetos || projetos.length === 0) {
+                    console.warn("Rede demorou ou oscilou. Carregando catálogo oficial de projetos de segurança.");
+                    projetos = [...PROJETOS_CATALOGO_OFICIAL];
+                }
                 currentProjectsList = projetos;
 
                 if (!projetos || projetos.length === 0) {
-                    container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 20px; color: var(--c-marrom-verm); font-weight: 700;">Nenhum projeto com inscrições abertas no momento.</div>';
+                    container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 24px 20px; color: var(--c-marrom-verm); font-weight: 700; border: 1.5px dashed var(--border-pencil); border-radius: var(--radius-input);"><p style="margin-bottom:8px;">Não foi possível carregar os projetos no momento devido a uma oscilação na sua conexão.</p><button type="button" class="btn-action-pencil" onclick="carregarProjetosParaAluno(currentStudentData?.idade)" style="margin:0 auto;padding:8px 16px;font-size:12px;cursor:pointer;">Tentar Novamente</button></div>';
                     return;
                 }
 
@@ -6169,7 +6184,12 @@
                 if (window.lucide) lucide.createIcons();
 
             } catch(e) {
-                console.error('Erro ao buscar projetos:', e);
+                console.warn("Erro ao buscar projetos via rede, ativando catálogo oficial de segurança:", e);
+                if (PROJETOS_CATALOGO_OFICIAL && PROJETOS_CATALOGO_OFICIAL.length > 0) {
+                    currentProjectsList = [...PROJETOS_CATALOGO_OFICIAL];
+                    carregarProjetosParaAluno(currentStudentData?.idade);
+                    return;
+                }
                 container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 24px 20px; color: var(--c-marrom-verm); font-weight: 700; border: 1.5px dashed var(--border-pencil); border-radius: var(--radius-input);"><p style="margin-bottom:8px;">Erro ao carregar projetos. Tente novamente.</p><button type="button" class="btn-action-pencil" onclick="carregarProjetosParaAluno(currentStudentData?.idade)" style="margin:0 auto;padding:8px 16px;font-size:12px;cursor:pointer;">Tentar Novamente</button></div>';
             }
         }
