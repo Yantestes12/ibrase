@@ -3526,14 +3526,14 @@
                 "id": 13,
                 "projeto_id": 2,
                 "nome": "Parque Fluminense",
-                "modalidade_id": null,
+                "modalidade_id": 3,
                 "espaco_id": 13,
                 "bairro": "Parque Fluminense",
                 "cidade": "Belford Roxo",
                 "ponto_referencia": "",
-                "ativo": false,
+                "ativo": true,
                 "vagas": "100",
-                "inscritos": "108",
+                "inscritos": "208",
                 "aceitando_vagas": true
         },
         {
@@ -3660,6 +3660,34 @@
                 "ativo": true,
                 "vagas": "110",
                 "inscritos": "9",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 193,
+                "projeto_id": 1,
+                "nome": "Várzea",
+                "modalidade_id": 5,
+                "espaco_id": 113,
+                "bairro": "Várzea",
+                "cidade": "Teresópolis",
+                "ponto_referencia": "",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 195,
+                "projeto_id": 4,
+                "nome": "Parque São Caetano",
+                "modalidade_id": 5,
+                "espaco_id": 115,
+                "bairro": "Parque São Caetano",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
                 "aceitando_vagas": true
         }
 ];
@@ -4577,6 +4605,39 @@
                 "cep": "28055190",
                 "ponto_referencia": "",
                 "ativo": true
+        },
+        {
+                "id": 113,
+                "nome": "Várzea",
+                "bairro": "Várzea",
+                "cidade": "Teresópolis",
+                "rua": "Rua Tenente Luiz Meirelles",
+                "numero": "211",
+                "cep": "25955001",
+                "ponto_referencia": "",
+                "ativo": true
+        },
+        {
+                "id": 114,
+                "nome": "Aroeira",
+                "bairro": "Aroeira",
+                "cidade": "Macaé",
+                "rua": "",
+                "numero": "",
+                "cep": "",
+                "ponto_referencia": "",
+                "ativo": true
+        },
+        {
+                "id": 115,
+                "nome": "Parque São Caetano",
+                "bairro": "Parque São Caetano",
+                "cidade": "Campos dos Goytacazes",
+                "rua": "Rua Francisca Carvalho de Azevedo",
+                "numero": "S/N",
+                "cep": "",
+                "ponto_referencia": "",
+                "ativo": true
         }
 ];
 
@@ -4667,7 +4728,7 @@
                     }, 6000);
 
                     // Busca espaços em paralelo no N8N (atualiza cache dinamicamente sem bloquear o fluxo principal)
-                    fetchWithTimeout(API.buscarEspacos, {}, 5000)
+                    fetchWithTimeout(API.buscarEspacos, {}, 12000)
                         .then(respE => {
                             const eList = parseN8N(respE, 'espacos');
                             if (eList && eList.length > 0) _cacheEspacos = eList;
@@ -4677,7 +4738,16 @@
 
                     const nList = parseN8N(respN, 'nucleos');
                     if (nList && nList.length > 0) {
-                        _cacheNucleos = nList;
+                        _cacheNucleos = nList.map(n => {
+                            const esp = resolverEspacoDoNucleo(n, _cacheEspacos);
+                            const modId = n.modalidade_id || esp?.modalidade_id || (Number(n.id) === 13 ? 3 : null);
+                            return {
+                                ...n,
+                                modalidade_id: modId,
+                                cidade: (n.cidade && String(n.cidade).trim()) || (esp?.cidade && String(esp.cidade).trim()) || '',
+                                bairro: (n.bairro && String(n.bairro).trim()) || (esp?.bairro && String(esp.bairro).trim()) || ''
+                            };
+                        });
                     }
                     
                     let mods = [];
@@ -6532,7 +6602,7 @@
             const modalidadesMap = new Map();
             filtrados.forEach(n => {
                 const esp = resolverEspaco(n);
-                const modId = n.modalidade_id || esp?.modalidade_id;
+                const modId = n.modalidade_id || esp?.modalidade_id || (Number(n.id) === 13 ? 3 : null);
                 // CORREÇÃO: não assume 'Futebol de Campo' como fallback — ignora núcleo sem modalidade definida
                 const modNome = n.modalidade_nome || modMap[modId] || (typeof MODALIDADES_FALLBACK !== 'undefined' ? MODALIDADES_FALLBACK[modId] : null) || null;
                 if (!modNome) return; // núcleo sem modalidade definida não aparece na lista
