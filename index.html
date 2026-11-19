@@ -6851,7 +6851,7 @@
             modalidadesArr.forEach((mod, idx) => {
                 const iconInfo = obterIconeModalidade(mod.nome);
                 const qtdNuc = mod.nucleos.length;
-                const subtitulo = `${qtdNuc} local${qtdNuc > 1 ? 'is' : ''} de treino`;
+                const subtitulo = `${qtdNuc} ${qtdNuc === 1 ? 'local' : 'locais'} de treino`;
 
                 const card = document.createElement('div');
                 card.className = 'modalidade-sport-card';
@@ -6938,7 +6938,7 @@
                 } else if (infoVagas.emReserva) {
                     badgeVagasHtml = `<span class="tile-vagas-badge tile-vagas-reserva"><i data-lucide="clock" style="width: 11px; height: 11px;"></i> Cadastro de Reserva (${infoVagas.vagasRestantes} restante${infoVagas.vagasRestantes > 1 ? 's' : ''})</span>`;
                 } else {
-                    badgeVagasHtml = `<span class="tile-vagas-badge tile-vagas-abertas"><i data-lucide="check" style="width: 11px; height: 11px;"></i> ${infoVagas.vagasRegularesRestantes} vaga${infoVagas.vagasRegularesRestantes > 1 ? 's' : ''} disponível${infoVagas.vagasRegularesRestantes > 1 ? 's' : ''}</span>`;
+                    badgeVagasHtml = `<span class="tile-vagas-badge tile-vagas-abertas"><i data-lucide="check" style="width: 11px; height: 11px;"></i> ${infoVagas.vagasRegularesRestantes} ${infoVagas.vagasRegularesRestantes === 1 ? 'vaga disponível' : 'vagas disponíveis'}</span>`;
                 }
 
                 const card = document.createElement('div');
